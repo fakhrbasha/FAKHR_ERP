@@ -1,0 +1,25 @@
+import Mail from "nodemailer/lib/mailer";
+import nodemailer from 'nodemailer';
+import { GMAIL_PASS, GMAIL_USER } from "../../../config/config.service";
+export const sendEmail = async (mailOptions: Mail.Options) => {
+    const transporter = nodemailer.createTransport({
+        //   host: "smtp.ethereal.email",
+        //   port: 587,
+        //   secure: false, // Use true for port 465, false for port 587
+        service: "gmail",
+        auth: {
+            user: GMAIL_USER,
+            pass: GMAIL_PASS
+        },
+    });
+    const info = await transporter.sendMail({
+        from: `"VOLCANO "<${GMAIL_USER}>`,
+        ...mailOptions
+    });
+
+    // console.log("Message sent:", info.messageId);
+    return info.accepted.length ? true : false
+}
+export const sendOtp = async () => {
+    return Math.floor(100000 + Math.random() * 900000)
+}

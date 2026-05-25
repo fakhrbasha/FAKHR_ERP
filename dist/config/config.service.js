@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PREFIX_ADMIN = exports.PREFIX_USER = exports.REFRESH_SECRET_KEY_USER = exports.REFRESH_SECRET_KEY_ADMIN = exports.ACCESS_SECRET_KEY_ADMIN = exports.ACCESS_SECRET_KEY_USER = exports.SALT_ROUND = exports.GMAIL_PASS = exports.GMAIL_USER = exports.REDIS_URL = exports.MONGO_URL = exports.PORT = void 0;
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+exports.PORT = Number(process.env.PORT);
+exports.MONGO_URL = process.env.MONGO_URI;
+exports.REDIS_URL = process.env.REDIS_URL;
+exports.GMAIL_USER = process.env.GMAIL_USER;
+exports.GMAIL_PASS = process.env.GMAIL_PASS;
+exports.SALT_ROUND = Number(process.env.SALT_ROUND);
+exports.ACCESS_SECRET_KEY_USER = process.env.ACCESS_SECRET_KEY_USER;
+exports.ACCESS_SECRET_KEY_ADMIN = process.env.ACCESS_SECRET_KEY_ADMIN;
+exports.REFRESH_SECRET_KEY_ADMIN = process.env.REFRESH_SECRET_KEY_ADMIN;
+exports.REFRESH_SECRET_KEY_USER = process.env.REFRESH_SECRET_KEY_USER;
+exports.PREFIX_USER = process.env.PREFIX_USER;
+exports.PREFIX_ADMIN = process.env.PREFIX_ADMIN;
