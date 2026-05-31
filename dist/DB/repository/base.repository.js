@@ -24,5 +24,8 @@ class BaseRepository {
     async update(filter, data) {
         return await this.model.findOneAndUpdate(filter, data, { new: true }).exec();
     }
+    async delete(id) {
+        return this.model.findByIdAndDelete(id);
+    }
 }
 exports.default = BaseRepository;

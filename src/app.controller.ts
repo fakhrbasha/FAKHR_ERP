@@ -4,6 +4,9 @@ import { AppError, globalErrorHandler } from "./common/utils/global-error-handli
 import { PORT } from "./config/config.service";
 import redisService from "./common/services/redis.service";
 import authRouter from "./modules/auth/auth.controller";
+import departmentRouter from "./modules/department/department.controller";
+import employeeRouter from "./modules/employee/employee.controller";
+import attendanceRouter from "./modules/Attendance/attendance.controller";
 const app: express.Application = express();
 const port = PORT || 3000
 const bootstrap = () => {
@@ -13,6 +16,9 @@ const bootstrap = () => {
     redisService.connect()
 
     app.use('/auth', authRouter)
+    app.use('/department', departmentRouter)
+    app.use('/attendance', attendanceRouter)
+    app.use('/employee', employeeRouter)
     app.get('/', (req: Request, res: Response) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" })
     })

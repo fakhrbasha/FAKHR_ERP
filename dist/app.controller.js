@@ -9,6 +9,9 @@ const global_error_handling_1 = require("./common/utils/global-error-handling");
 const config_service_1 = require("./config/config.service");
 const redis_service_1 = __importDefault(require("./common/services/redis.service"));
 const auth_controller_1 = __importDefault(require("./modules/auth/auth.controller"));
+const department_controller_1 = __importDefault(require("./modules/department/department.controller"));
+const employee_controller_1 = __importDefault(require("./modules/employee/employee.controller"));
+const attendance_controller_1 = __importDefault(require("./modules/Attendance/attendance.controller"));
 const app = (0, express_1.default)();
 const port = config_service_1.PORT || 3000;
 const bootstrap = () => {
@@ -16,6 +19,9 @@ const bootstrap = () => {
     (0, connectionDB_1.CheckConnectionDB)();
     redis_service_1.default.connect();
     app.use('/auth', auth_controller_1.default);
+    app.use('/department', department_controller_1.default);
+    app.use('/attendance', attendance_controller_1.default);
+    app.use('/employee', employee_controller_1.default);
     app.get('/', (req, res) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" });
     });

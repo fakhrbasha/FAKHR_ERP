@@ -68,6 +68,10 @@ abstract class BaseRepository<TDocument> {
             { new: true }
         ).exec();
     }
+
+    async delete(id: Types.ObjectId): Promise<HydratedDocument<TDocument> | null> {
+        return this.model.findByIdAndDelete(id);
+    }
 }
 
 
