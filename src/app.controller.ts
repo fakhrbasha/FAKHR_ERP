@@ -7,6 +7,7 @@ import authRouter from "./modules/auth/auth.controller";
 import departmentRouter from "./modules/department/department.controller";
 import employeeRouter from "./modules/employee/employee.controller";
 import attendanceRouter from "./modules/Attendance/attendance.controller";
+import materialRouter from "./modules/materials/material.controller";
 const app: express.Application = express();
 const port = PORT || 3000
 const bootstrap = () => {
@@ -19,6 +20,7 @@ const bootstrap = () => {
     app.use('/department', departmentRouter)
     app.use('/attendance', attendanceRouter)
     app.use('/employee', employeeRouter)
+    app.use('/material', materialRouter)
     app.get('/', (req: Request, res: Response) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" })
     })
