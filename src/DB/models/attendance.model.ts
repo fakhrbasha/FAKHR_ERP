@@ -49,4 +49,4 @@ const attendanceSchema = new mongoose.Schema<IAttendance>({
 const attendanceModel = mongoose.models.Attendance || mongoose.model<IAttendance>("Attendance", attendanceSchema)
 
 export default attendanceModel;
-export type UserDocument = HydratedDocument<IAttendance>;
+export type AttendanceDocument = HydratedDocument<IAttendance>;

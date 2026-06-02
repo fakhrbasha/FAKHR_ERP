@@ -8,6 +8,8 @@ import departmentRouter from "./modules/department/department.controller";
 import employeeRouter from "./modules/employee/employee.controller";
 import attendanceRouter from "./modules/Attendance/attendance.controller";
 import materialRouter from "./modules/materials/material.controller";
+import colorRouter from "./modules/Color/Color.controller";
+import yarnStockRouter from "./modules/Stock/yarnStock.controller";
 const app: express.Application = express();
 const port = PORT || 3000
 const bootstrap = () => {
@@ -21,6 +23,8 @@ const bootstrap = () => {
     app.use('/attendance', attendanceRouter)
     app.use('/employee', employeeRouter)
     app.use('/material', materialRouter)
+    app.use('/color', colorRouter)
+    app.use('/yarn-stock', yarnStockRouter)
     app.get('/', (req: Request, res: Response) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" })
     })

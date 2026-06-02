@@ -13,6 +13,8 @@ const department_controller_1 = __importDefault(require("./modules/department/de
 const employee_controller_1 = __importDefault(require("./modules/employee/employee.controller"));
 const attendance_controller_1 = __importDefault(require("./modules/Attendance/attendance.controller"));
 const material_controller_1 = __importDefault(require("./modules/materials/material.controller"));
+const Color_controller_1 = __importDefault(require("./modules/Color/Color.controller"));
+const yarnStock_controller_1 = __importDefault(require("./modules/Stock/yarnStock.controller"));
 const app = (0, express_1.default)();
 const port = config_service_1.PORT || 3000;
 const bootstrap = () => {
@@ -24,6 +26,8 @@ const bootstrap = () => {
     app.use('/attendance', attendance_controller_1.default);
     app.use('/employee', employee_controller_1.default);
     app.use('/material', material_controller_1.default);
+    app.use('/color', Color_controller_1.default);
+    app.use('/yarn-stock', yarnStock_controller_1.default);
     app.get('/', (req, res) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" });
     });

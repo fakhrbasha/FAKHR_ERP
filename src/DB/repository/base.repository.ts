@@ -72,6 +72,49 @@ abstract class BaseRepository<TDocument> {
     async delete(id: Types.ObjectId): Promise<HydratedDocument<TDocument> | null> {
         return this.model.findByIdAndDelete(id);
     }
+
+
+    async paginate<T>({
+        page,
+        limit,
+        sort,
+        populate,
+        search
+    }: {
+        page?: number,
+        limit?: number,
+        sort?: any,
+        populate?: any,
+        search?: QueryFilter<T>
+    }) {
+
+        page = +page! || 1
+        limit = +limit! || 2
+        if (page < 0) page = 1
+        if (limit < 0) limit = 2
+        const skip = (page - 1) * limit
+
+        const [data, totalDoc] = await Promise.all([
+            this.model.find({ ...(search ?? {}) })
+                .skip(skip)
+                .limit(limit)
+                .populate(populate)
+                .sort(sort),
+            this.model.countDocuments({ ...(search ?? {}) })
+        ])
+        const totalPages = Math.ceil(totalDoc! / limit)
+
+        return {
+            meta: {
+                currentPage: page,
+                totalPages,
+                limit,
+                totalDoc
+            },
+            data
+        }
+
+    }
 }
 
 

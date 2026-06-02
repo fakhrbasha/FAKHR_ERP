@@ -15,3 +15,4 @@ export const REFRESH_SECRET_KEY_ADMIN = process.env.REFRESH_SECRET_KEY_ADMIN;
 export const REFRESH_SECRET_KEY_USER = process.env.REFRESH_SECRET_KEY_USER;
 export const PREFIX_USER = process.env.PREFIX_USER;
 export const PREFIX_ADMIN = process.env.PREFIX_ADMIN;
+export const WAREHOUSE_EMAIL = process.env.WAREHOUSE_EMAIL;

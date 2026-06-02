@@ -27,5 +27,32 @@ class BaseRepository {
     async delete(id) {
         return this.model.findByIdAndDelete(id);
     }
+    async paginate({ page, limit, sort, populate, search }) {
+        page = +page || 1;
+        limit = +limit || 2;
+        if (page < 0)
+            page = 1;
+        if (limit < 0)
+            limit = 2;
+        const skip = (page - 1) * limit;
+        const [data, totalDoc] = await Promise.all([
+            this.model.find({ ...(search ?? {}) })
+                .skip(skip)
+                .limit(limit)
+                .populate(populate)
+                .sort(sort),
+            this.model.countDocuments({ ...(search ?? {}) })
+        ]);
+        const totalPages = Math.ceil(totalDoc / limit);
+        return {
+            meta: {
+                currentPage: page,
+                totalPages,
+                limit,
+                totalDoc
+            },
+            data
+        };
+    }
 }
 exports.default = BaseRepository;

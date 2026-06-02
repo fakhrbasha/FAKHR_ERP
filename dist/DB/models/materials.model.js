@@ -20,6 +20,12 @@ const materialSchema = new mongoose_1.default.Schema({
         enum: material_enum_1.UnitEnum,
         default: material_enum_1.UnitEnum.kg
     }
+}, {
+    timestamps: true,
+    strict: true,
+    strictQuery: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 const materialModel = mongoose_1.default.models.Material || mongoose_1.default.model("Material", materialSchema);
 exports.default = materialModel;

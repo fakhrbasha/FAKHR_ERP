@@ -23,4 +23,4 @@ const departmentModel = mongoose.models.Department || mongoose.model<IDepartment
 
 
 export default departmentModel;
-export type UserDocument = HydratedDocument<IDepartment>;
+export type DepartmentDocument = HydratedDocument<IDepartment>;

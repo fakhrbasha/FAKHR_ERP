@@ -4,12 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const base_repository_1 = __importDefault(require("./base.repository"));
-const department_model_1 = __importDefault(require("../models/department.model"));
-class DepartmentRepository extends base_repository_1.default {
+const color_model_1 = __importDefault(require("../models/color.model"));
+class ColorRepository extends base_repository_1.default {
     model;
-    constructor(model = department_model_1.default) {
+    constructor(model = color_model_1.default) {
         super(model);
         this.model = model;
     }
 }
-exports.default = DepartmentRepository;
+exports.default = ColorRepository;

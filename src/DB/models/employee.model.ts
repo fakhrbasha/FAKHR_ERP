@@ -47,4 +47,4 @@ const employeeModel = mongoose.models.Employees || mongoose.model<IEmployee>("Em
 
 
 export default employeeModel;
-export type UserDocument = HydratedDocument<IEmployee>;
+export type EmployeeDocument = HydratedDocument<IEmployee>;

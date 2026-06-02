@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PREFIX_ADMIN = exports.PREFIX_USER = exports.REFRESH_SECRET_KEY_USER = exports.REFRESH_SECRET_KEY_ADMIN = exports.ACCESS_SECRET_KEY_ADMIN = exports.ACCESS_SECRET_KEY_USER = exports.SALT_ROUND = exports.GMAIL_PASS = exports.GMAIL_USER = exports.REDIS_URL = exports.MONGO_URL = exports.PORT = void 0;
+exports.WAREHOUSE_EMAIL = exports.PREFIX_ADMIN = exports.PREFIX_USER = exports.REFRESH_SECRET_KEY_USER = exports.REFRESH_SECRET_KEY_ADMIN = exports.ACCESS_SECRET_KEY_ADMIN = exports.ACCESS_SECRET_KEY_USER = exports.SALT_ROUND = exports.GMAIL_PASS = exports.GMAIL_USER = exports.REDIS_URL = exports.MONGO_URL = exports.PORT = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 exports.PORT = Number(process.env.PORT);
@@ -18,3 +18,4 @@ exports.REFRESH_SECRET_KEY_ADMIN = process.env.REFRESH_SECRET_KEY_ADMIN;
 exports.REFRESH_SECRET_KEY_USER = process.env.REFRESH_SECRET_KEY_USER;
 exports.PREFIX_USER = process.env.PREFIX_USER;
 exports.PREFIX_ADMIN = process.env.PREFIX_ADMIN;
+exports.WAREHOUSE_EMAIL = process.env.WAREHOUSE_EMAIL;

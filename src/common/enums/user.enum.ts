@@ -6,5 +6,6 @@ export enum RoleEnum {
 
 export enum EmailEnum {
     confirmedEmail = "confirmedEmail",
-    forgetPassword = "forgetPassword"
+    forgetPassword = "forgetPassword",
+    lowStock = "lowStock"
 }

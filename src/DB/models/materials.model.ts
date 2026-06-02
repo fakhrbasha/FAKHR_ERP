@@ -26,10 +26,16 @@ const materialSchema = new mongoose.Schema<IMaterial>({
         enum: UnitEnum,
         default: UnitEnum.kg
     }
+}, {
+    timestamps: true,
+    strict: true,
+    strictQuery: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 })
 
 
 const materialModel = mongoose.models.Material || mongoose.model<IMaterial>("Material", materialSchema)
 
 export default materialModel;
-export type UserDocument = HydratedDocument<IMaterial>;
+export type MaterialDocument = HydratedDocument<IMaterial>;
