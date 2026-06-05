@@ -188,9 +188,17 @@ class StockService {
         return successResponse({ res, status: 200, message: "Stock history retrieved successfully", data: history })
     }
 
-    getAllStockTransaction = async (req: Request, res: Response, next: NextFunction) => {
-        const { stockId } = req.params
-        const stock = await this._stockModel.findOne({ filter: { _id: stockId } })
+    getAllStockTransaction = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) => {
+
+        const { stockId } = req.params;
+
+        const stock = await this._stockModel.findOne({
+            filter: { _id: stockId }
+        });
 
         if (!stock) {
             throw new AppError(
@@ -198,21 +206,34 @@ class StockService {
                 404
             );
         }
-        const transactions = await this._stockTransactionModel.find({
-            filter: {
-                stockId
-            },
-            options: {
+
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+
+        const transactions =
+            await this._stockTransactionModel.paginate({
+                page,
+                limit,
+                search: {
+                    stockId
+                },
                 populate: [
                     {
                         path: "createdBy",
-                        select: "firstName lastName  email"
+                        select: "firstName lastName email"
                     }
-                ]
-            }
-        })
-        return successResponse({ res, status: 200, message: "Stock transactions retrieved successfully", data: transactions })
+                ],
+                sort: {
+                    createdAt: -1
+                }
+            });
 
+        return successResponse({
+            res,
+            status: 200,
+            message: "Stock transactions retrieved successfully",
+            data: transactions
+        });
     }
 }
 

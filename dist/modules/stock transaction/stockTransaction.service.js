@@ -124,24 +124,36 @@ class StockService {
     };
     getAllStockTransaction = async (req, res, next) => {
         const { stockId } = req.params;
-        const stock = await this._stockModel.findOne({ filter: { _id: stockId } });
+        const stock = await this._stockModel.findOne({
+            filter: { _id: stockId }
+        });
         if (!stock) {
             throw new global_error_handling_1.AppError("Stock not found", 404);
         }
-        const transactions = await this._stockTransactionModel.find({
-            filter: {
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const transactions = await this._stockTransactionModel.paginate({
+            page,
+            limit,
+            search: {
                 stockId
             },
-            options: {
-                populate: [
-                    {
-                        path: "createdBy",
-                        select: "firstName lastName  email"
-                    }
-                ]
+            populate: [
+                {
+                    path: "createdBy",
+                    select: "firstName lastName email"
+                }
+            ],
+            sort: {
+                createdAt: -1
             }
         });
-        return (0, success_response_1.successResponse)({ res, status: 200, message: "Stock transactions retrieved successfully", data: transactions });
+        return (0, success_response_1.successResponse)({
+            res,
+            status: 200,
+            message: "Stock transactions retrieved successfully",
+            data: transactions
+        });
     };
 }
 exports.default = new StockService();

@@ -15,6 +15,7 @@ const attendance_controller_1 = __importDefault(require("./modules/Attendance/at
 const material_controller_1 = __importDefault(require("./modules/materials/material.controller"));
 const Color_controller_1 = __importDefault(require("./modules/Color/Color.controller"));
 const yarnStock_controller_1 = __importDefault(require("./modules/Stock/yarnStock.controller"));
+const supplier_controller_1 = __importDefault(require("./modules/supplier/supplier.controller"));
 const app = (0, express_1.default)();
 const port = config_service_1.PORT || 3000;
 const bootstrap = () => {
@@ -28,6 +29,7 @@ const bootstrap = () => {
     app.use('/material', material_controller_1.default);
     app.use('/color', Color_controller_1.default);
     app.use('/yarn-stock', yarnStock_controller_1.default);
+    app.use('/suppliers', supplier_controller_1.default);
     app.get('/', (req, res) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" });
     });
