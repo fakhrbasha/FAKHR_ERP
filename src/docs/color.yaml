@@ -1,0 +1,92 @@
+tags:
+  - name: Color
+    description: Manage yarn colors
+
+paths:
+  /color/add-color:
+    post:
+      tags: [Color]
+      summary: Add a new color
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddColorBody'
+      responses:
+        '201':
+          description: Color added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthorized
+
+  /color:
+    get:
+      tags: [Color]
+      summary: Get all colors
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of all colors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized
+
+  /color/update-color/{id}:
+    put:
+      tags: [Color]
+      summary: Update a color
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "664f1c2e3a1b2c3d4e5f6a7b"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateColorBody'
+      responses:
+        '200':
+          description: Color updated successfully
+        '404':
+          description: Color not found
+        '401':
+          description: Unauthorized
+
+  /color/delete-color/{id}:
+    delete:
+      tags: [Color]
+      summary: Delete a color
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "664f1c2e3a1b2c3d4e5f6a7b"
+      responses:
+        '200':
+          description: Color deleted successfully
+        '404':
+          description: Color not found
+        '401':
+          description: Unauthorized

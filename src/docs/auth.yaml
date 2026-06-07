@@ -1,0 +1,152 @@
+tags:
+  - name: Auth
+    description: Authentication & authorization endpoints
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterBody'
+      responses:
+        '201':
+          description: User registered. OTP sent to email.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/confirm-email:
+    post:
+      tags: [Auth]
+      summary: Confirm email with OTP
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmEmailBody'
+      responses:
+        '200':
+          description: Email confirmed successfully
+        '400':
+          description: Invalid or expired OTP
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login with email and password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginBody'
+      responses:
+        '200':
+          description: Login successful, returns JWT tokens
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string, example: "Login successful" }
+                  accessToken: { type: string }
+                  refreshToken: { type: string }
+        '401':
+          description: Invalid credentials
+
+  /auth/resend-otp:
+    post:
+      tags: [Auth]
+      summary: Resend email confirmation OTP
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailOnlyBody'
+      responses:
+        '200':
+          description: OTP resent successfully
+        '404':
+          description: User not found
+
+  /auth/forget-password:
+    post:
+      tags: [Auth]
+      summary: Request password reset OTP
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailOnlyBody'
+      responses:
+        '200':
+          description: Password reset OTP sent
+        '404':
+          description: User not found
+
+  /auth/reset-password:
+    post:
+      tags: [Auth]
+      summary: Reset password using OTP
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordBody'
+      responses:
+        '200':
+          description: Password reset successful
+        '400':
+          description: Invalid OTP
+
+  /auth/update-password:
+    post:
+      tags: [Auth]
+      summary: Update password (authenticated)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasswordBody'
+      responses:
+        '200':
+          description: Password updated successfully
+        '401':
+          description: Unauthorized
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Logout and invalidate session
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Logged out successfully
+        '401':
+          description: Unauthorized

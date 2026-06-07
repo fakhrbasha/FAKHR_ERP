@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
+import swaggerUi from "swagger-ui-express";
 import { CheckConnectionDB } from "./DB/connectionDB"
 import { AppError, globalErrorHandler } from "./common/utils/global-error-handling";
 import { PORT } from "./config/config.service";
@@ -11,10 +12,23 @@ import materialRouter from "./modules/materials/material.controller";
 import colorRouter from "./modules/Color/Color.controller";
 import yarnStockRouter from "./modules/Stock/yarnStock.controller";
 import supplierRouter from "./modules/supplier/supplier.controller";
+import { swaggerSpec } from "./config/swagger.config";
+import purchaseOrderRouter from "./modules/PurchaseOrder/PurchaseOrder.controller";
 const app: express.Application = express();
 const port = PORT || 3000
 const bootstrap = () => {
     app.use(express.json());
+
+    // ─── Swagger UI ──────────────────────────────────────────────────────────────
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+        customSiteTitle: '🌋 Volcano API Docs',
+        customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::after { content: '🌋 Volcano API'; color: #e94560; font-size: 1.4rem; font-weight: 700; }`,
+        swaggerOptions: { persistAuthorization: true },
+    }));
+    app.get('/api-docs.json', (_req: Request, res: Response) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(swaggerSpec);
+    });
 
     CheckConnectionDB()
     redisService.connect()
@@ -27,6 +41,7 @@ const bootstrap = () => {
     app.use('/color', colorRouter)
     app.use('/yarn-stock', yarnStockRouter)
     app.use('/suppliers', supplierRouter)
+    app.use('/purchase-order', purchaseOrderRouter)
     app.get('/', (req: Request, res: Response) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" })
     })
@@ -35,7 +50,9 @@ const bootstrap = () => {
         throw new AppError(`Invalid URL ${req.originalUrl} with method ${req.method} not found`, 404)
     })
     app.listen(port, () => {
-        console.log(`Server is running on port ${port}`);
+        console.log(`✅ Server is running on port ${port}`);
+        console.log(`📄 Swagger docs  → http://localhost:${port}/api-docs`);
+        console.log(`🔗 API JSON spec → http://localhost:${port}/api-docs.json`);
     });
 }
 

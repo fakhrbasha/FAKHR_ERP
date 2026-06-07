@@ -9,7 +9,7 @@ const employee_repository_1 = __importDefault(require("../../DB/repository/emplo
 const mongoose_1 = __importDefault(require("mongoose"));
 const supplier_repository_1 = __importDefault(require("../../DB/repository/supplier.repository"));
 const success_response_1 = require("../../common/utils/success.response");
-class AttendanceService {
+class SupplierService {
     _attendanceModel = new attendance_repository_1.default();
     _employeeModel = new employee_repository_1.default();
     _supplierModel = new supplier_repository_1.default();
@@ -138,4 +138,4 @@ class AttendanceService {
         });
     };
 }
-exports.default = new AttendanceService();
+exports.default = new SupplierService();

@@ -10,7 +10,7 @@ import { successResponse } from "../../common/utils/success.response"
 
 
 
-class AttendanceService {
+class SupplierService {
 
 
 
@@ -193,4 +193,4 @@ class AttendanceService {
 
 }
 
-export default new AttendanceService()
+export default new SupplierService()

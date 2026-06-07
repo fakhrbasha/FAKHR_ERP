@@ -8,7 +8,7 @@ export interface IYarnStock {
     colorId: Types.ObjectId;
     quantity: number;
     minQuantity: number;
-    createdBy: string;
+    createdBy: Types.ObjectId;
 }
 
 
@@ -17,7 +17,7 @@ const stockSchema = new mongoose.Schema<IYarnStock>({
     colorId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Color' },
     quantity: { type: Number, required: true },
     minQuantity: { type: Number, required: true },
-    createdBy: { type: String, required: true },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, required: true },
 }, {
     timestamps: true,
     strict: true,

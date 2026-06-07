@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const connectionDB_1 = require("./DB/connectionDB");
 const global_error_handling_1 = require("./common/utils/global-error-handling");
 const config_service_1 = require("./config/config.service");
@@ -16,10 +17,21 @@ const material_controller_1 = __importDefault(require("./modules/materials/mater
 const Color_controller_1 = __importDefault(require("./modules/Color/Color.controller"));
 const yarnStock_controller_1 = __importDefault(require("./modules/Stock/yarnStock.controller"));
 const supplier_controller_1 = __importDefault(require("./modules/supplier/supplier.controller"));
+const swagger_config_1 = require("./config/swagger.config");
+const PurchaseOrder_controller_1 = __importDefault(require("./modules/PurchaseOrder/PurchaseOrder.controller"));
 const app = (0, express_1.default)();
 const port = config_service_1.PORT || 3000;
 const bootstrap = () => {
     app.use(express_1.default.json());
+    app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpec, {
+        customSiteTitle: '🌋 Volcano API Docs',
+        customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::after { content: '🌋 Volcano API'; color: #e94560; font-size: 1.4rem; font-weight: 700; }`,
+        swaggerOptions: { persistAuthorization: true },
+    }));
+    app.get('/api-docs.json', (_req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(swagger_config_1.swaggerSpec);
+    });
     (0, connectionDB_1.CheckConnectionDB)();
     redis_service_1.default.connect();
     app.use('/auth', auth_controller_1.default);
@@ -30,6 +42,7 @@ const bootstrap = () => {
     app.use('/color', Color_controller_1.default);
     app.use('/yarn-stock', yarnStock_controller_1.default);
     app.use('/suppliers', supplier_controller_1.default);
+    app.use('/purchase-order', PurchaseOrder_controller_1.default);
     app.get('/', (req, res) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" });
     });
@@ -38,7 +51,9 @@ const bootstrap = () => {
         throw new global_error_handling_1.AppError(`Invalid URL ${req.originalUrl} with method ${req.method} not found`, 404);
     });
     app.listen(port, () => {
-        console.log(`Server is running on port ${port}`);
+        console.log(`✅ Server is running on port ${port}`);
+        console.log(`📄 Swagger docs  → http://localhost:${port}/api-docs`);
+        console.log(`🔗 API JSON spec → http://localhost:${port}/api-docs.json`);
     });
 };
 exports.default = bootstrap;

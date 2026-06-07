@@ -9,7 +9,7 @@ const stockSchema = new mongoose_1.default.Schema({
     colorId: { type: mongoose_1.default.Schema.Types.ObjectId, required: true, ref: 'Color' },
     quantity: { type: Number, required: true },
     minQuantity: { type: Number, required: true },
-    createdBy: { type: String, required: true },
+    createdBy: { type: mongoose_1.default.Schema.Types.ObjectId, required: true },
 }, {
     timestamps: true,
     strict: true,
