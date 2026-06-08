@@ -162,6 +162,29 @@ const swaggerDefinition = {
                     reason: { type: "string", example: "Monthly replenishment" },
                 },
             },
+            PurchaseOrderItem: {
+                type: "object",
+                required: ["materialId", "colorId", "quantity", "unitPrice"],
+                properties: {
+                    materialId: { type: "string", example: "664f1c2e3a1b2c3d4e5f6a7b" },
+                    colorId: { type: "string", example: "664f1c2e3a1b2c3d4e5f6a7c" },
+                    quantity: { type: "number", minimum: 1, example: 200 },
+                    unitPrice: { type: "number", minimum: 0.01, example: 35.5 },
+                },
+            },
+            CreatePurchaseOrderBody: {
+                type: "object",
+                required: ["supplierId", "items"],
+                properties: {
+                    supplierId: { type: "string", example: "664f1c2e3a1b2c3d4e5f6a7d" },
+                    items: {
+                        type: "array",
+                        minItems: 1,
+                        items: { $ref: "#/components/schemas/PurchaseOrderItem" },
+                    },
+                    notes: { type: "string", example: "Urgent delivery needed by end of week" },
+                },
+            },
             CreateSupplierBody: {
                 type: "object",
                 required: ["companyName", "contactPerson", "phone"],
