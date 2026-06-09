@@ -1,0 +1,222 @@
+tags:
+  - name: Reports
+    description: Reporting endpoints for expenses, attendance, stock, and purchase orders
+
+paths:
+  /reports/expenses:
+    get:
+      tags: [Reports]
+      summary: Get expense report
+      description: Returns all expenses filtered by date range and/or category.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: from
+          schema:
+            type: string
+            format: date
+          description: Start date filter (e.g. 2026-01-01)
+          example: "2026-01-01"
+        - in: query
+          name: to
+          schema:
+            type: string
+            format: date
+          description: End date filter (e.g. 2026-12-31)
+          example: "2026-12-31"
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Filter by expense category
+          example: Utilities
+      responses:
+        '200':
+          description: Expense report retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Expense report retrieved successfully
+                  data:
+                    type: object
+                    properties:
+                      totalExpenses:
+                        type: number
+                        example: 15000
+                      count:
+                        type: integer
+                        example: 20
+                      expenses:
+                        type: array
+                        items:
+                          type: object
+        '401':
+          description: Unauthorized
+
+  /reports/attendance:
+    get:
+      tags: [Reports]
+      summary: Get attendance report
+      description: Returns attendance records filtered by employee and/or date range.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: employeeId
+          schema:
+            type: string
+          description: Filter by employee MongoDB ID
+          example: "664f1c2e3a1b2c3d4e5f6a7b"
+        - in: query
+          name: from
+          schema:
+            type: string
+            format: date
+          description: Start date filter
+          example: "2026-01-01"
+        - in: query
+          name: to
+          schema:
+            type: string
+            format: date
+          description: End date filter
+          example: "2026-06-30"
+      responses:
+        '200':
+          description: Attendance report retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Attendance report retrieved successfully
+                  data:
+                    type: object
+                    properties:
+                      totalPresent:
+                        type: integer
+                        example: 50
+                      totalAbsent:
+                        type: integer
+                        example: 5
+                      totalLate:
+                        type: integer
+                        example: 3
+                      totalOvertime:
+                        type: number
+                        example: 12.5
+                      records:
+                        type: array
+                        items:
+                          type: object
+        '401':
+          description: Unauthorized
+
+  /reports/low-stock:
+    get:
+      tags: [Reports]
+      summary: Get low stock report
+      description: Returns yarn stock items where current quantity is at or below the minimum threshold.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Low stock report retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Low stock report retrieved successfully
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        example: 7
+                      stocks:
+                        type: array
+                        items:
+                          type: object
+        '401':
+          description: Unauthorized
+
+  /reports/purchase-orders:
+    get:
+      tags: [Reports]
+      summary: Get purchase orders report
+      description: Returns purchase orders filtered by status, supplier, and/or date range.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [PENDING, APPROVED, RECEIVED, CANCELLED]
+          description: Filter by purchase order status
+          example: APPROVED
+        - in: query
+          name: supplierId
+          schema:
+            type: string
+          description: Filter by supplier MongoDB ID
+          example: "664f1c2e3a1b2c3d4e5f6a7d"
+        - in: query
+          name: from
+          schema:
+            type: string
+            format: date
+          description: Start date filter
+          example: "2026-01-01"
+        - in: query
+          name: to
+          schema:
+            type: string
+            format: date
+          description: End date filter
+          example: "2026-12-31"
+      responses:
+        '200':
+          description: Purchase orders report retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Purchase orders report retrieved successfully
+                  data:
+                    type: object
+                    properties:
+                      totalOrders:
+                        type: integer
+                        example: 40
+                      approvedOrders:
+                        type: integer
+                        example: 20
+                      receivedOrders:
+                        type: integer
+                        example: 15
+                      cancelledOrders:
+                        type: integer
+                        example: 5
+                      totalAmount:
+                        type: number
+                        example: 250000
+                      orders:
+                        type: array
+                        items:
+                          type: object
+        '401':
+          description: Unauthorized

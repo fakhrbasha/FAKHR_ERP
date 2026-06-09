@@ -208,6 +208,85 @@ const swaggerDefinition = {
                     note: { type: "string", example: "Updated note" },
                 },
             },
+            CreateCustomerBody: {
+                type: "object",
+                required: ["name", "phone", "address"],
+                properties: {
+                    name: { type: "string", minLength: 3, example: "Mohamed Salem" },
+                    phone: { type: "string", minLength: 10, example: "01012345678" },
+                    address: { type: "string", minLength: 3, example: "Cairo, Egypt" },
+                    note: { type: "string", example: "Regular customer" },
+                },
+            },
+            UpdateCustomerBody: {
+                type: "object",
+                properties: {
+                    name: { type: "string", minLength: 3, example: "Mohamed Salem" },
+                    phone: { type: "string", minLength: 10, example: "01012345678" },
+                    address: { type: "string", minLength: 3, example: "Alexandria, Egypt" },
+                    note: { type: "string", example: "Updated note" },
+                },
+            },
+            CreateExpenseBody: {
+                type: "object",
+                required: ["title", "amount", "category"],
+                properties: {
+                    title: { type: "string", minLength: 3, example: "Electricity Bill" },
+                    amount: { type: "number", minimum: 0.01, example: 1200 },
+                    category: { type: "string", minLength: 2, example: "Utilities" },
+                    expenseDate: { type: "string", format: "date", example: "2026-06-01" },
+                    note: { type: "string", example: "Monthly electricity payment" },
+                },
+            },
+            UpdateExpenseBody: {
+                type: "object",
+                properties: {
+                    title: { type: "string", minLength: 3, example: "Water Bill" },
+                    amount: { type: "number", minimum: 0.01, example: 500 },
+                    category: { type: "string", minLength: 2, example: "Utilities" },
+                    expenseDate: { type: "string", format: "date", example: "2026-06-05" },
+                    note: { type: "string", example: "Updated note" },
+                },
+            },
+            CreateProductBody: {
+                type: "object",
+                required: ["name", "sku", "category", "sellingPrice", "availableSizes", "availableColors", "quantity"],
+                properties: {
+                    name: { type: "string", example: "Classic T-Shirt" },
+                    sku: { type: "string", example: "TS-001" },
+                    description: { type: "string", example: "Comfortable everyday cotton t-shirt" },
+                    category: { type: "string", example: "T-Shirts" },
+                    sellingPrice: { type: "string", example: "150" },
+                    availableSizes: {
+                        type: "array",
+                        items: { type: "string", enum: ["XS", "S", "M", "L", "XL", "XXL"] },
+                        example: ["S", "M", "L"],
+                    },
+                    availableColors: {
+                        type: "array",
+                        items: { type: "string" },
+                        example: ["664f1c2e3a1b2c3d4e5f6a7c"],
+                    },
+                    quantity: { type: "string", example: "100" },
+                },
+            },
+            UpdateProductBody: {
+                type: "object",
+                properties: {
+                    name: { type: "string", example: "Updated T-Shirt" },
+                    sku: { type: "string", example: "TS-001-V2" },
+                    description: { type: "string", example: "Updated description" },
+                    category: { type: "string", example: "T-Shirts" },
+                    sellingPrice: { type: "string", example: "175" },
+                    availableSizes: {
+                        type: "array",
+                        items: { type: "string", enum: ["XS", "S", "M", "L", "XL", "XXL"] },
+                    },
+                    availableColors: { type: "array", items: { type: "string" } },
+                    quantity: { type: "string", example: "80" },
+                    isActive: { type: "boolean", example: true },
+                },
+            },
             SuccessResponse: {
                 type: "object",
                 properties: {

@@ -1,0 +1,56 @@
+tags:
+  - name: Dashboard
+    description: Dashboard statistics endpoint
+
+paths:
+  /dashboard/state:
+    get:
+      tags: [Dashboard]
+      summary: Get dashboard statistics
+      description: Returns aggregated counts for employees, departments, suppliers, customers, products, materials, purchase orders and low-stock items.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Dashboard statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Dashboard statistics retrieved successfully
+                  data:
+                    type: object
+                    properties:
+                      employees:
+                        type: integer
+                        example: 25
+                      departments:
+                        type: integer
+                        example: 5
+                      suppliers:
+                        type: integer
+                        example: 12
+                      customers:
+                        type: integer
+                        example: 80
+                      products:
+                        type: integer
+                        example: 150
+                      materials:
+                        type: integer
+                        example: 30
+                      purchaseOrders:
+                        type: integer
+                        example: 40
+                      lowStockItems:
+                        type: integer
+                        example: 7
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

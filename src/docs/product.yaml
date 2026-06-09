@@ -1,0 +1,239 @@
+tags:
+  - name: Products
+    description: Product management endpoints
+
+paths:
+  /products/add-product:
+    post:
+      tags: [Products]
+      summary: Add a new product (with image upload)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [name, sku, category, sellingPrice, availableSizes, availableColors, quantity, image]
+              properties:
+                name:
+                  type: string
+                  example: Classic T-Shirt
+                sku:
+                  type: string
+                  example: TS-001
+                description:
+                  type: string
+                  example: Comfortable everyday cotton t-shirt
+                category:
+                  type: string
+                  example: T-Shirts
+                sellingPrice:
+                  type: string
+                  example: "150"
+                availableSizes:
+                  type: array
+                  items:
+                    type: string
+                    enum: [XS, S, M, L, XL, XXL]
+                  example: [S, M, L]
+                availableColors:
+                  type: array
+                  items:
+                    type: string
+                  example: ["664f1c2e3a1b2c3d4e5f6a7c"]
+                quantity:
+                  type: string
+                  example: "100"
+                image:
+                  type: string
+                  format: binary
+                  description: Product image file
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Product image is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Product already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+
+  /products:
+    get:
+      tags: [Products]
+      summary: Get all products (paginated)
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+          description: Items per page
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search products by name
+      responses:
+        '200':
+          description: Products fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized
+
+  /products/{id}:
+    get:
+      tags: [Products]
+      summary: Get product by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Product MongoDB ID
+      responses:
+        '200':
+          description: Product fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+
+    delete:
+      tags: [Products]
+      summary: Delete a product by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Product MongoDB ID
+      responses:
+        '200':
+          description: Product deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+
+  /products/edit-product/{id}:
+    put:
+      tags: [Products]
+      summary: Update a product by ID (with optional image upload)
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Product MongoDB ID
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Updated T-Shirt
+                sku:
+                  type: string
+                  example: TS-001-V2
+                description:
+                  type: string
+                  example: Updated description
+                category:
+                  type: string
+                  example: T-Shirts
+                sellingPrice:
+                  type: string
+                  example: "175"
+                availableSizes:
+                  type: array
+                  items:
+                    type: string
+                    enum: [XS, S, M, L, XL, XXL]
+                availableColors:
+                  type: array
+                  items:
+                    type: string
+                quantity:
+                  type: string
+                  example: "80"
+                isActive:
+                  type: boolean
+                  example: true
+                image:
+                  type: string
+                  format: binary
+                  description: New product image (optional)
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Product with this SKU already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
