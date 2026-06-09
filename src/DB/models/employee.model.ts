@@ -43,7 +43,7 @@ const employeeSchema = new mongoose.Schema<IEmployee>({
     toObject: { virtuals: true }
 })
 
-const employeeModel = mongoose.models.Employees || mongoose.model<IEmployee>("Employees", employeeSchema)
+const employeeModel = mongoose.models.Employees || mongoose.model<IEmployee>("Employee", employeeSchema)
 
 
 export default employeeModel;

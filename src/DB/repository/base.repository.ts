@@ -73,6 +73,11 @@ abstract class BaseRepository<TDocument> {
         return this.model.findByIdAndDelete(id);
     }
 
+    async count(
+        filter: QueryFilter<TDocument> = {}
+    ): Promise<number> {
+        return this.model.countDocuments(filter);
+    }
 
     async paginate<T>({
         page,

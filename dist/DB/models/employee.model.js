@@ -36,5 +36,5 @@ const employeeSchema = new mongoose_1.default.Schema({
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
-const employeeModel = mongoose_1.default.models.Employees || mongoose_1.default.model("Employees", employeeSchema);
+const employeeModel = mongoose_1.default.models.Employees || mongoose_1.default.model("Employee", employeeSchema);
 exports.default = employeeModel;

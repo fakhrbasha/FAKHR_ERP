@@ -27,6 +27,9 @@ class BaseRepository {
     async delete(id) {
         return this.model.findByIdAndDelete(id);
     }
+    async count(filter = {}) {
+        return this.model.countDocuments(filter);
+    }
     async paginate({ page, limit, sort, populate, search }) {
         page = +page || 1;
         limit = +limit || 2;
