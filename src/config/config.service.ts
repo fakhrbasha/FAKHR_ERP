@@ -16,3 +16,6 @@ export const REFRESH_SECRET_KEY_USER = process.env.REFRESH_SECRET_KEY_USER;
 export const PREFIX_USER = process.env.PREFIX_USER;
 export const PREFIX_ADMIN = process.env.PREFIX_ADMIN;
 export const WAREHOUSE_EMAIL = process.env.WAREHOUSE_EMAIL;
+export const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME
+export const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY
+export const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET

@@ -14,6 +14,8 @@ import yarnStockRouter from "./modules/Stock/yarnStock.controller";
 import supplierRouter from "./modules/supplier/supplier.controller";
 import { swaggerSpec } from "./config/swagger.config";
 import purchaseOrderRouter from "./modules/PurchaseOrder/PurchaseOrder.controller";
+import productRouter from "./modules/products/product.controller";
+import customerRouter from "./modules/Customer/Customer.controller";
 const app: express.Application = express();
 const port = PORT || 3000
 const bootstrap = () => {
@@ -42,6 +44,8 @@ const bootstrap = () => {
     app.use('/yarn-stock', yarnStockRouter)
     app.use('/suppliers', supplierRouter)
     app.use('/purchase-order', purchaseOrderRouter)
+    app.use('/products', productRouter)
+    app.use('/customers', customerRouter)
     app.get('/', (req: Request, res: Response) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" })
     })
