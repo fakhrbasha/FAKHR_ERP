@@ -140,7 +140,7 @@ class SupplierService {
         )
 
 
-        successResponse({ res, status: 200, message: "customers deleted successfully", data: updatedCustomer })
+        successResponse({ res, status: 200, message: "customers Updated successfully", data: updatedCustomer })
     }
 
 

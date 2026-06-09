@@ -100,7 +100,7 @@ class SupplierService {
             }
         }
         const updatedCustomer = await this._customerModel.update({ _id: id }, updateData);
-        (0, success_response_1.successResponse)({ res, status: 200, message: "customers deleted successfully", data: updatedCustomer });
+        (0, success_response_1.successResponse)({ res, status: 200, message: "customers Updated successfully", data: updatedCustomer });
     };
 }
 exports.default = new SupplierService();

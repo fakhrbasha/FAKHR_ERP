@@ -71,7 +71,7 @@ class StockService {
 
 
 
-        const newStock = await this._stockModel.create({ materialId, colorId, quantity, minQuantity, createdBy: req.user!.firstName })
+        const newStock = await this._stockModel.create({ materialId, colorId, quantity, minQuantity, createdBy: req.user!._id })
         return successResponse({ res, status: 201, message: "Stock created successfully", data: newStock })
     }
 

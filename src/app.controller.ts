@@ -16,6 +16,7 @@ import { swaggerSpec } from "./config/swagger.config";
 import purchaseOrderRouter from "./modules/PurchaseOrder/PurchaseOrder.controller";
 import productRouter from "./modules/products/product.controller";
 import customerRouter from "./modules/Customer/Customer.controller";
+import expensesRouter from "./modules/expenses/expenses.controller";
 const app: express.Application = express();
 const port = PORT || 3000
 const bootstrap = () => {
@@ -46,6 +47,7 @@ const bootstrap = () => {
     app.use('/purchase-order', purchaseOrderRouter)
     app.use('/products', productRouter)
     app.use('/customers', customerRouter)
+    app.use('/expenses', expensesRouter)
     app.get('/', (req: Request, res: Response) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" })
     })

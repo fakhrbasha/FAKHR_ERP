@@ -4,12 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const base_repository_1 = __importDefault(require("./base.repository"));
-const attendance_model_1 = __importDefault(require("../models/attendance.model"));
-class AttendanceRepository extends base_repository_1.default {
+const expenses_model_1 = __importDefault(require("../models/expenses.model"));
+class ExpensesRepository extends base_repository_1.default {
     model;
-    constructor(model = attendance_model_1.default) {
+    constructor(model = expenses_model_1.default) {
         super(model);
         this.model = model;
     }
 }
-exports.default = AttendanceRepository;
+exports.default = ExpensesRepository;

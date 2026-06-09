@@ -21,6 +21,7 @@ const swagger_config_1 = require("./config/swagger.config");
 const PurchaseOrder_controller_1 = __importDefault(require("./modules/PurchaseOrder/PurchaseOrder.controller"));
 const product_controller_1 = __importDefault(require("./modules/products/product.controller"));
 const Customer_controller_1 = __importDefault(require("./modules/Customer/Customer.controller"));
+const expenses_controller_1 = __importDefault(require("./modules/expenses/expenses.controller"));
 const app = (0, express_1.default)();
 const port = config_service_1.PORT || 3000;
 const bootstrap = () => {
@@ -47,6 +48,7 @@ const bootstrap = () => {
     app.use('/purchase-order', PurchaseOrder_controller_1.default);
     app.use('/products', product_controller_1.default);
     app.use('/customers', Customer_controller_1.default);
+    app.use('/expenses', expenses_controller_1.default);
     app.get('/', (req, res) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" });
     });

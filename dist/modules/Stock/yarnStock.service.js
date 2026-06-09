@@ -35,7 +35,7 @@ class StockService {
         if (minQuantity > quantity) {
             throw new global_error_handling_1.AppError("Minimum quantity cannot be greater than available quantity", 400);
         }
-        const newStock = await this._stockModel.create({ materialId, colorId, quantity, minQuantity, createdBy: req.user.firstName });
+        const newStock = await this._stockModel.create({ materialId, colorId, quantity, minQuantity, createdBy: req.user._id });
         return (0, success_response_1.successResponse)({ res, status: 201, message: "Stock created successfully", data: newStock });
     };
     getAllYarnStock = async (req, res, next) => {

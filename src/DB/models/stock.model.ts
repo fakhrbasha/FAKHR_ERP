@@ -9,6 +9,7 @@ export interface IYarnStock {
     quantity: number;
     minQuantity: number;
     createdBy: Types.ObjectId;
+    // createdBy: string;
 }
 
 
@@ -18,6 +19,7 @@ const stockSchema = new mongoose.Schema<IYarnStock>({
     quantity: { type: Number, required: true },
     minQuantity: { type: Number, required: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, required: true },
+    // createdBy: { type: String, required: true },
 }, {
     timestamps: true,
     strict: true,
