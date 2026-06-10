@@ -8,8 +8,8 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const config_service_1 = require("../config/config.service");
 const CheckConnectionDB = async () => {
     try {
-        await mongoose_1.default.connect(config_service_1.MONGO_URL);
-        console.log(`Connected to MongoDB successfully at ${config_service_1.MONGO_URL}`);
+        await mongoose_1.default.connect(config_service_1.MONGO_URI_ONLINE);
+        console.log(`Connected to MongoDB successfully at ${config_service_1.MONGO_URI_ONLINE}`);
     }
     catch (error) {
         console.error("Error connecting to MongoDB:", error);

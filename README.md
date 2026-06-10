@@ -30,6 +30,7 @@ A production-ready REST API built with **Node.js**, **Express**, and **TypeScrip
   - [Expenses](#-expenses---expenses)
   - [Dashboard](#-dashboard---dashboard)
   - [Reports](#-reports---reports)
+  - [Notifications](#-notifications---notifications)
 - [Authentication](#authentication)
 - [Error Handling](#error-handling)
 - [Architecture](#architecture)
@@ -104,7 +105,8 @@ Volcano/
 │   │   ├── customer.yaml
 │   │   ├── expenses.yaml
 │   │   ├── dashboard.yaml
-│   │   └── reports.yaml
+│   │   ├── reports.yaml
+│   │   └── notification.yaml
 │   ├── modules/
 │   │   ├── auth/
 │   │   ├── department/
@@ -120,6 +122,7 @@ Volcano/
 │   │   ├── Customer/
 │   │   ├── expenses/
 │   │   ├── dashboard/
+│   │   ├── notification/
 │   │   └── Reports/
 │   └── types/                   # Global TypeScript type extensions
 ├── dist/                        # Compiled JavaScript output
@@ -475,6 +478,16 @@ GET /reports/expenses?from=2026-01-01&to=2026-06-30&category=Utilities
 ```
 GET /reports/purchase-orders?status=APPROVED
 ```
+
+---
+
+### 🔔 Notifications — `/notifications`
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/notifications` | 🔒 Get all notifications (paginated, searchable) |
+| GET | `/notifications/unread-count` | 🔒 Get unread notification count |
+| GET | `/notifications/:id/read` | 🔒 Mark a notification as read |
 
 ---
 

@@ -1,0 +1,76 @@
+tags:
+  - name: Notifications
+    description: Manage system notifications
+
+paths:
+  /notifications:
+    get:
+      tags: [Notifications]
+      summary: Get all notifications
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search term for title or message
+      responses:
+        '200':
+          description: Notifications fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized
+
+  /notifications/unread-count:
+    get:
+      tags: [Notifications]
+      summary: Get count of unread notifications
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Unread notifications count retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized
+
+  /notifications/{id}/read:
+    get:
+      tags: [Notifications]
+      summary: Mark a notification as read
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Notification read successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '404':
+          description: Notification not found
+        '401':
+          description: Unauthorized

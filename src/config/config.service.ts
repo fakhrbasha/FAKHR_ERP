@@ -5,6 +5,7 @@ dotenv.config();
 export const PORT = Number(process.env.PORT);
 
 export const MONGO_URL = process.env.MONGO_URI;
+export const MONGO_URI_ONLINE = process.env.MONGO_URI_ONLINE;
 export const REDIS_URL = process.env.REDIS_URL;
 export const GMAIL_USER = process.env.GMAIL_USER;
 export const GMAIL_PASS = process.env.GMAIL_PASS;
