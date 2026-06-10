@@ -22,22 +22,21 @@ import reportsRouter from "./modules/Reports/Reports.controller";
 import notificationRouter from "./modules/notification/notification.controller";
 const app: express.Application = express();
 const port = PORT || 3000
-const bootstrap = () => {
-    app.use(express.json());
+app.use(express.json());
 
-    // ─── Swagger UI ──────────────────────────────────────────────────────────────
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-        customSiteTitle: '🌋 Volcano API Docs',
-        customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::after { content: '🌋 Volcano API'; color: #e94560; font-size: 1.4rem; font-weight: 700; }`,
-        swaggerOptions: { persistAuthorization: true },
-    }));
-    app.get('/api-docs.json', (_req: Request, res: Response) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(swaggerSpec);
-    });
+// ─── Swagger UI ──────────────────────────────────────────────────────────────
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: '🌋 Volcano API Docs',
+    customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::after { content: '🌋 Volcano API'; color: #e94560; font-size: 1.4rem; font-weight: 700; }`,
+    swaggerOptions: { persistAuthorization: true },
+}));
+app.get('/api-docs.json', (_req: Request, res: Response) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+});
 
-    CheckConnectionDB()
-    redisService.connect()
+CheckConnectionDB()
+redisService.connect()
 
     app.use('/auth', authRouter)
     app.use('/department', departmentRouter)
@@ -57,10 +56,12 @@ const bootstrap = () => {
     app.get('/', (req: Request, res: Response) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" })
     })
-    app.use(globalErrorHandler);
-    app.use("{/*demo}", (req: Request, res: Response, next: NextFunction) => {
-        throw new AppError(`Invalid URL ${req.originalUrl} with method ${req.method} not found`, 404)
-    })
+app.use(globalErrorHandler);
+app.use("{/*demo}", (req: Request, res: Response, next: NextFunction) => {
+    throw new AppError(`Invalid URL ${req.originalUrl} with method ${req.method} not found`, 404)
+})
+
+export const bootstrap = () => {
     app.listen(port, () => {
         console.log(`✅ Server is running on port ${port}`);
         console.log(`📄 Swagger docs  → http://localhost:${port}/api-docs`);
@@ -68,4 +69,4 @@ const bootstrap = () => {
     });
 }
 
-export default bootstrap
+export default app;

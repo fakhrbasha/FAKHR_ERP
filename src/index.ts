@@ -1,3 +1,7 @@
-import bootstrap from "./app.controller";
+import app, { bootstrap } from "./app.controller";
 
-bootstrap()
+if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+    bootstrap();
+}
+
+export default app;
