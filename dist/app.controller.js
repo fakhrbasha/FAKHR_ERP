@@ -24,6 +24,7 @@ const Customer_controller_1 = __importDefault(require("./modules/Customer/Custom
 const expenses_controller_1 = __importDefault(require("./modules/expenses/expenses.controller"));
 const dashboard_controller_1 = __importDefault(require("./modules/dashboard/dashboard.controller"));
 const Reports_controller_1 = __importDefault(require("./modules/Reports/Reports.controller"));
+const notification_controller_1 = __importDefault(require("./modules/notification/notification.controller"));
 const app = (0, express_1.default)();
 const port = config_service_1.PORT || 3000;
 const bootstrap = () => {
@@ -53,6 +54,7 @@ const bootstrap = () => {
     app.use('/expenses', expenses_controller_1.default);
     app.use('/dashboard', dashboard_controller_1.default);
     app.use('/reports', Reports_controller_1.default);
+    app.use('/notifications', notification_controller_1.default);
     app.get('/', (req, res) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" });
     });

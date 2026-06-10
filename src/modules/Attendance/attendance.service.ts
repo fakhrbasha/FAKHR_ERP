@@ -126,7 +126,34 @@ class AttendanceService {
     }
 
     getAttendance = async (req: Request, res: Response, next: NextFunction) => {
-        const data = await this._attendanceModel.find({ filter: {} })
+
+        const page = Number(req.query.page)
+        const limit = Number(req.query.limit)
+        const searchQuery =
+            req.query.search
+                ? {
+                    $or: [
+                        {
+                            checkIn: {
+                                $regex: req.query.search,
+                                $options: "i"
+                            }
+                        },
+                        {
+                            checkOut: {
+                                $regex: req.query.search,
+                                $options: "i"
+                            }
+                        },
+                    ]
+                }
+                : {};
+        const data = await this._attendanceModel.paginate({
+            page,
+            limit,
+            search: searchQuery
+
+        })
 
         return res.status(200).json({
             success: true,

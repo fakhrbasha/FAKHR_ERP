@@ -11,7 +11,7 @@ import { successResponse } from "../../common/utils/success.response"
 import StockRepository from "../../DB/repository/stock.repository"
 import { IYarnStock } from "../../DB/models/stock.model"
 import MaterialRepository from "../../DB/repository/material.repository"
-import { eventEmitter } from "../../common/utils/email/email.event"
+import { eventEmitter, NotificationEventEnum } from "../../common/utils/email/email.event"
 import { sendEmail } from "../../common/utils/email/nodeMailer"
 import { WAREHOUSE_EMAIL } from "../../config/config.service"
 import { EmailEnum } from "../../common/enums/user.enum"
@@ -157,6 +157,14 @@ class StockService {
                 material,
                 color
             });
+            eventEmitter.emit(
+                NotificationEventEnum.LOW_STOCK,
+                {
+                    material,
+                    color,
+                    newQuantity,
+                }
+            );
         }
 
         successResponse({ res, status: 200, message: "Stock updated successfully", data: { quantity: updatedStock } })

@@ -31,7 +31,17 @@ class MaterialService {
         });
     };
     getMaterials = async (req, res, next) => {
-        const data = await this._materialModel.find({ filter: {} });
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const searchQuery = req.query.search
+            ? {
+                name: {
+                    $regex: req.query.search,
+                    $options: "i"
+                }
+            }
+            : {};
+        const data = await this._materialModel.paginate({ page, limit, search: searchQuery });
         if (!data) {
             throw new global_error_handling_1.AppError("Data Is Empty", 400);
         }

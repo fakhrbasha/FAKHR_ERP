@@ -43,7 +43,17 @@ class EmployeeService {
         });
     };
     getEmployees = async (req, res, next) => {
-        const data = await this._employeeModel.find({ filter: {} });
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const searchQuery = req.query.search
+            ? {
+                name: {
+                    $regex: req.query.search,
+                    $options: "i"
+                }
+            }
+            : {};
+        const data = await this._employeeModel.paginate({ page, limit, search: searchQuery });
         return res.status(200).json({
             status: true,
             message: "Employees retrieved successfully",

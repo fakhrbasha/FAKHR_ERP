@@ -11,10 +11,12 @@ const stock_repository_1 = __importDefault(require("../../DB/repository/stock.re
 const material_repository_1 = __importDefault(require("../../DB/repository/material.repository"));
 const email_event_1 = require("../../common/utils/email/email.event");
 const user_enum_1 = require("../../common/enums/user.enum");
+const notification_repository_1 = __importDefault(require("../../DB/repository/notification.repository"));
 class StockService {
     _stockModel = new stock_repository_1.default();
     _materialModel = new material_repository_1.default();
     _colorModel = new color_repository_1.default();
+    _notificationModel = new notification_repository_1.default();
     createYarnStock = async (req, res, next) => {
         const { materialId, colorId, quantity, minQuantity } = req.body;
         const material = await this._materialModel.findOne({ filter: { _id: materialId } });
@@ -39,7 +41,17 @@ class StockService {
         return (0, success_response_1.successResponse)({ res, status: 201, message: "Stock created successfully", data: newStock });
     };
     getAllYarnStock = async (req, res, next) => {
-        const stocks = await this._stockModel.find({ filter: {} });
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const searchQuery = req.query.search
+            ? {
+                name: {
+                    $regex: req.query.search,
+                    $options: "i"
+                }
+            }
+            : {};
+        const stocks = await this._stockModel.paginate({ page, limit, search: searchQuery });
         return (0, success_response_1.successResponse)({ res, status: 200, message: "Stocks retrieved successfully", data: stocks });
     };
     deleteYarnStock = async (req, res, next) => {

@@ -14,6 +14,9 @@ import purchaseOrderRepository from "../../DB/repository/purchaseOrder.repositor
 import StockRepository from "../../DB/repository/stock.repository"
 import StockTransactionRepository from "../../DB/repository/stockTransaction.repository"
 import { TransactionStock_Enum } from "../../DB/models/stockTransaction.model"
+import NotificationRepository from "../../DB/repository/notification.repository"
+import { NotificationType } from "../../DB/models/notifications.model"
+import { eventEmitter, NotificationEventEnum } from "../../common/utils/email/email.event"
 
 
 
@@ -28,6 +31,7 @@ class PurchaseOrderService {
     private readonly _supplierModel = new SupplierRepository()
     private readonly _stockModel = new StockRepository()
     private readonly _stockTransactionModel = new StockTransactionRepository()
+    private readonly _notificationModel = new NotificationRepository()
 
 
     createPurchaseOrder = async (req: Request, res: Response, next: NextFunction) => {
@@ -93,6 +97,9 @@ class PurchaseOrderService {
             notes,
             status: PurchaseOrderStatus.PENDING,
             createdBy: req.user!._id
+        })
+        eventEmitter.emit(NotificationEventEnum.PURCHASE_ORDER_CREATED, {
+            orderId: order._id
         })
 
 
@@ -211,6 +218,10 @@ class PurchaseOrderService {
         const updateOrder = await this._purchaseOrder.update({ _id: id }, {
             status: PurchaseOrderStatus.APPROVED
         })
+
+        eventEmitter.emit(NotificationEventEnum.PURCHASE_ORDER_APPROVED, {
+            orderId: Order._id
+        })
         return successResponse({
             res,
             status: 200,
@@ -240,7 +251,9 @@ class PurchaseOrderService {
                     status: PurchaseOrderStatus.CANCELLED
                 }
             );
-
+        eventEmitter.emit(NotificationEventEnum.PURCHASE_ORDER_CANCELLED, {
+            orderId: Order._id
+        })
         return successResponse({
             res,
             status: 200,
@@ -308,7 +321,9 @@ class PurchaseOrderService {
                 status: PurchaseOrderStatus.RECEIVED
             }
         );
-
+        eventEmitter.emit(NotificationEventEnum.PURCHASE_ORDER_RECEIVED, {
+            orderId: Order._id
+        })
         return successResponse({
             res,
             status: 200,

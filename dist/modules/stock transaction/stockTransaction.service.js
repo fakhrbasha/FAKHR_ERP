@@ -98,6 +98,11 @@ class StockService {
                 material,
                 color
             });
+            email_event_1.eventEmitter.emit(email_event_1.NotificationEventEnum.LOW_STOCK, {
+                material,
+                color,
+                newQuantity,
+            });
         }
         (0, success_response_1.successResponse)({ res, status: 200, message: "Stock updated successfully", data: { quantity: updatedStock } });
     };

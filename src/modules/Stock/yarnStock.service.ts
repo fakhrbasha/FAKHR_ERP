@@ -15,6 +15,8 @@ import { eventEmitter } from "../../common/utils/email/email.event"
 import { sendEmail } from "../../common/utils/email/nodeMailer"
 import { WAREHOUSE_EMAIL } from "../../config/config.service"
 import { EmailEnum } from "../../common/enums/user.enum"
+import { NotificationType } from "../../DB/models/notifications.model"
+import NotificationRepository from "../../DB/repository/notification.repository"
 
 
 
@@ -26,6 +28,7 @@ class StockService {
     private readonly _stockModel = new StockRepository()
     private readonly _materialModel = new MaterialRepository()
     private readonly _colorModel = new ColorRepository()
+    private readonly _notificationModel = new NotificationRepository()
 
 
     createYarnStock = async (req: Request, res: Response, next: NextFunction) => {
@@ -76,7 +79,18 @@ class StockService {
     }
 
     getAllYarnStock = async (req: Request, res: Response, next: NextFunction) => {
-        const stocks = await this._stockModel.find({ filter: {} })
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+
+        const searchQuery = req.query.search
+            ? {
+                name: {
+                    $regex: req.query.search,
+                    $options: "i"
+                }
+            }
+            : {};
+        const stocks = await this._stockModel.paginate({ page, limit, search: searchQuery })
 
 
 
@@ -179,6 +193,7 @@ class StockService {
                 material,
                 color
             });
+
         }
 
         successResponse({ res, status: 200, message: "Stock updated successfully", data: { quantity: newQuantity } })

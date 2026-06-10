@@ -19,6 +19,7 @@ import customerRouter from "./modules/Customer/Customer.controller";
 import expensesRouter from "./modules/expenses/expenses.controller";
 import dashboardRouter from "./modules/dashboard/dashboard.controller";
 import reportsRouter from "./modules/Reports/Reports.controller";
+import notificationRouter from "./modules/notification/notification.controller";
 const app: express.Application = express();
 const port = PORT || 3000
 const bootstrap = () => {
@@ -52,6 +53,7 @@ const bootstrap = () => {
     app.use('/expenses', expensesRouter)
     app.use('/dashboard', dashboardRouter)
     app.use('/reports', reportsRouter)
+    app.use('/notifications', notificationRouter)
     app.get('/', (req: Request, res: Response) => {
         res.status(200).json({ message: "Welcome Fakhr In Your Home" })
     })

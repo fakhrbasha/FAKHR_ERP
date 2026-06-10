@@ -13,6 +13,8 @@ const purchaseOrder_repository_1 = __importDefault(require("../../DB/repository/
 const stock_repository_1 = __importDefault(require("../../DB/repository/stock.repository"));
 const stockTransaction_repository_1 = __importDefault(require("../../DB/repository/stockTransaction.repository"));
 const stockTransaction_model_1 = require("../../DB/models/stockTransaction.model");
+const notification_repository_1 = __importDefault(require("../../DB/repository/notification.repository"));
+const email_event_1 = require("../../common/utils/email/email.event");
 class PurchaseOrderService {
     _purchaseOrder = new purchaseOrder_repository_1.default();
     _materialModel = new material_repository_1.default();
@@ -20,6 +22,7 @@ class PurchaseOrderService {
     _supplierModel = new supplier_repository_1.default();
     _stockModel = new stock_repository_1.default();
     _stockTransactionModel = new stockTransaction_repository_1.default();
+    _notificationModel = new notification_repository_1.default();
     createPurchaseOrder = async (req, res, next) => {
         const { supplierId, notes, items } = req.body;
         const supplier = await this._supplierModel.findOne({
@@ -62,6 +65,9 @@ class PurchaseOrderService {
             notes,
             status: purchaseOrder_model_1.PurchaseOrderStatus.PENDING,
             createdBy: req.user._id
+        });
+        email_event_1.eventEmitter.emit(email_event_1.NotificationEventEnum.PURCHASE_ORDER_CREATED, {
+            orderId: order._id
         });
         return (0, success_response_1.successResponse)({
             res,
@@ -156,6 +162,9 @@ class PurchaseOrderService {
         const updateOrder = await this._purchaseOrder.update({ _id: id }, {
             status: purchaseOrder_model_1.PurchaseOrderStatus.APPROVED
         });
+        email_event_1.eventEmitter.emit(email_event_1.NotificationEventEnum.PURCHASE_ORDER_APPROVED, {
+            orderId: Order._id
+        });
         return (0, success_response_1.successResponse)({
             res,
             status: 200,
@@ -176,6 +185,9 @@ class PurchaseOrderService {
         }
         const updatedOrder = await this._purchaseOrder.update({ _id: id }, {
             status: purchaseOrder_model_1.PurchaseOrderStatus.CANCELLED
+        });
+        email_event_1.eventEmitter.emit(email_event_1.NotificationEventEnum.PURCHASE_ORDER_CANCELLED, {
+            orderId: Order._id
         });
         return (0, success_response_1.successResponse)({
             res,
@@ -229,6 +241,9 @@ class PurchaseOrderService {
         }
         await this._purchaseOrder.update({ _id: id }, {
             status: purchaseOrder_model_1.PurchaseOrderStatus.RECEIVED
+        });
+        email_event_1.eventEmitter.emit(email_event_1.NotificationEventEnum.PURCHASE_ORDER_RECEIVED, {
+            orderId: Order._id
         });
         return (0, success_response_1.successResponse)({
             res,
