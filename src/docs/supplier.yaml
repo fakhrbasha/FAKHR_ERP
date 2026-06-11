@@ -27,7 +27,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /suppliers:
     get:
       tags: [Supplier]
       summary: Get all suppliers
@@ -64,7 +63,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /suppliers/{id}:
     put:
       tags: [Supplier]
       summary: Update a supplier
@@ -91,7 +89,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /suppliers/{id}:
     delete:
       tags: [Supplier]
       summary: Delete a supplier

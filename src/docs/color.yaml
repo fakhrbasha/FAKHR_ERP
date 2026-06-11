@@ -27,7 +27,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /color:
     get:
       tags: [Color]
       summary: Get all colors
@@ -70,7 +69,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /color/{id}:
     delete:
       tags: [Color]
       summary: Delete a color

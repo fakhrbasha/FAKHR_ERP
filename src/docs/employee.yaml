@@ -72,7 +72,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /employee/{id}:
     put:
       tags: [Employee]
       summary: Update an employee
@@ -99,7 +98,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /employee/{id}:
     delete:
       tags: [Employee]
       summary: Delete an employee

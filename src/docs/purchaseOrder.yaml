@@ -29,7 +29,6 @@ paths:
         '404':
           description: Supplier, material, or color not found
 
-  /purchase-order:
     get:
       tags: [Purchase Orders]
       summary: Get all purchase orders (paginated)

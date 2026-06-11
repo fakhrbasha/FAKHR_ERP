@@ -31,7 +31,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /expenses:
     get:
       tags: [Expenses]
       summary: Get all expenses (paginated)
@@ -94,7 +93,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /expenses/{id}:
     put:
       tags: [Expenses]
       summary: Update an expense by ID
@@ -135,7 +133,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /expenses/{id}:
     delete:
       tags: [Expenses]
       summary: Delete an expense by ID

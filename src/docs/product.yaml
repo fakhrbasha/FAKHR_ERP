@@ -72,7 +72,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /products:
     get:
       tags: [Products]
       summary: Get all products (paginated)
@@ -163,7 +162,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /products/{id}:
     put:
       tags: [Products]
       summary: Update a product by ID (with optional image upload)

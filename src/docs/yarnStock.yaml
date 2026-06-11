@@ -27,7 +27,6 @@ paths:
         '401':
           description: Unauthorized
 
-  /yarn-stock:
     get:
       tags: [Yarn Stock]
       summary: Get all yarn stock entries
