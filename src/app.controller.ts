@@ -29,11 +29,6 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
     customSiteTitle: '🌋 Volcano API Docs',
     customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::after { content: '🌋 Volcano API'; color: #e94560; font-size: 1.4rem; font-weight: 700; }`,
-    customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css",
-    customJs: [
-        "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui-bundle.js",
-        "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui-standalone-preset.js"
-    ],
     swaggerOptions: { persistAuthorization: true },
 }));
 app.get('/api-docs.json', (_req: Request, res: Response) => {
