@@ -34,9 +34,14 @@ app.use(express.json());
 //     customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::after { content: '🌋 Volcano API'; color: #e94560; font-size: 1.4rem; font-weight: 700; }`,
 //     swaggerOptions: { persistAuthorization: true },
 // }));
+// app.use(
+//     "/api-docs",
+//     swaggerUi.serve,
+//     swaggerUi.setup(swaggerSpec)
+// );
 app.use(
     "/api-docs",
-    swaggerUi.serve,
+    swaggerUi.serveFiles(swaggerSpec),
     swaggerUi.setup(swaggerSpec)
 );
 app.get('/api-docs.json', (_req: Request, res: Response) => {

@@ -29,7 +29,7 @@ const notification_controller_1 = __importDefault(require("./modules/notificatio
 const app = (0, express_1.default)();
 const port = config_service_1.PORT || 3000;
 app.use(express_1.default.json());
-app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpec));
+app.use("/api-docs", swagger_ui_express_1.default.serveFiles(swagger_config_1.swaggerSpec), swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpec));
 app.get('/api-docs.json', (_req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swagger_config_1.swaggerSpec);
