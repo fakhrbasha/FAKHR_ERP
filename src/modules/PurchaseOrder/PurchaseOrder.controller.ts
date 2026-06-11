@@ -4,7 +4,7 @@ import PurchaseOrderService from "./PurchaseOrder.service";
 import { validation } from "../../common/middleware/validation";
 import * as purchaserValidation from "./PurchaseOrder.validation";
 const purchaseOrderRouter = Router()
-purchaseOrderRouter.post('/create-order', authentication,
+purchaseOrderRouter.post('/', authentication,
     validation(purchaserValidation.createPurchaseOrderSchema),
     PurchaseOrderService.createPurchaseOrder)
 

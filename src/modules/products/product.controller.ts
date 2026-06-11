@@ -7,7 +7,7 @@ import { multer_host } from "../../common/middleware/multer";
 import { imageTypes } from "../../common/enums/multer.enum";
 const productRouter = Router()
 
-productRouter.post('/add-product',
+productRouter.post('/',
     multer_host({ custom_type: imageTypes }).single("image"),
     authentication,
     validation(productValidation.createProductSchema),
@@ -17,7 +17,7 @@ productRouter.post('/add-product',
 productRouter.get('/', authentication, productService.getProducts)
 
 productRouter.put(
-    '/edit-product/:id',
+    '/:id',
     multer_host({ custom_type: imageTypes }).single("image"),
     authentication,
     validation(productValidation.editProductSchema),

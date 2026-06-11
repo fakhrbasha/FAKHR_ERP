@@ -3,7 +3,7 @@ tags:
     description: Manage suppliers
 
 paths:
-  /suppliers/add-supplier:
+  /suppliers:
     post:
       tags: [Supplier]
       summary: Add a new supplier
@@ -27,7 +27,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /suppliers/get-suppliers:
+  /suppliers:
     get:
       tags: [Supplier]
       summary: Get all suppliers
@@ -43,7 +43,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /suppliers/get-supplier/{id}:
+  /suppliers/{id}:
     get:
       tags: [Supplier]
       summary: Get supplier by ID
@@ -64,7 +64,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /suppliers/update-supplier/{id}:
+  /suppliers/{id}:
     put:
       tags: [Supplier]
       summary: Update a supplier
@@ -91,7 +91,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /suppliers/delete-supplier/{id}:
+  /suppliers/{id}:
     delete:
       tags: [Supplier]
       summary: Delete a supplier

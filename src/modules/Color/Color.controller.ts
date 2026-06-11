@@ -6,9 +6,9 @@ import ColorService from "./Color.service";
 const colorRouter = Router()
 
 
-colorRouter.post('/add-color', authentication, validation(colorValidation.addColorSchema), ColorService.addColor)
+colorRouter.post('/', authentication, validation(colorValidation.addColorSchema), ColorService.addColor)
 colorRouter.get('/', authentication, ColorService.getColors)
-colorRouter.put('/update-color/:id', authentication, validation(colorValidation.updateColorSchema), ColorService.editColor)
-colorRouter.delete('/delete-color/:id', authentication, ColorService.deleteColor)
+colorRouter.put('/:id', authentication, validation(colorValidation.updateColorSchema), ColorService.editColor)
+colorRouter.delete('/:id', authentication, ColorService.deleteColor)
 
 export default colorRouter

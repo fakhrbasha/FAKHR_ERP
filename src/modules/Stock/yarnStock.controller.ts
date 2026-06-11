@@ -6,7 +6,7 @@ import YarnStockService from "./yarnStock.service";
 import StockTransactionRouter from "../stock transaction/stockTransaction.controller";
 const yarnStockRouter = Router()
 yarnStockRouter.use("/transaction/:stockId/", StockTransactionRouter)
-yarnStockRouter.post("/create", authentication, validation(yarnStockValidation.addYarnStockSchema), YarnStockService.createYarnStock)
+yarnStockRouter.post("/", authentication, validation(yarnStockValidation.addYarnStockSchema), YarnStockService.createYarnStock)
 yarnStockRouter.get("/", authentication, YarnStockService.getAllYarnStock)
 
 yarnStockRouter.delete("/:id", authentication, YarnStockService.deleteYarnStock)

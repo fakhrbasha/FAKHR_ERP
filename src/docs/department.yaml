@@ -3,7 +3,7 @@ tags:
     description: Manage departments
 
 paths:
-  /department/create-department:
+  /department:
     post:
       tags: [Department]
       summary: Create a new department
@@ -27,7 +27,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /department/all-departments:
+  /department:
     get:
       tags: [Department]
       summary: Get all departments
@@ -64,7 +64,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /department/update-department/{id}:
+  /department/{id}:
     put:
       tags: [Department]
       summary: Update a department
@@ -91,7 +91,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /department/delete-department/{id}:
+  /department/{id}:
     delete:
       tags: [Department]
       summary: Delete a department

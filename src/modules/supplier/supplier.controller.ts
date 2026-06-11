@@ -5,10 +5,10 @@ import { validation } from "../../common/middleware/validation";
 import * as supplierValidation from "./supplier.validation";
 const supplierRouter = Router()
 
-supplierRouter.post("/add-supplier", authentication, validation(supplierValidation.createSupplierSchema), supplierService.addSupplier)
-supplierRouter.get("/get-suppliers", authentication, supplierService.getAllSuppliers)
-supplierRouter.get("/get-supplier/:id", authentication, validation(supplierValidation.getSupplierByIdSchema), supplierService.getSupplierById)
-supplierRouter.put("/update-supplier/:id", authentication, validation(supplierValidation.updateSupplierSchema), supplierService.updateSupplier)
-supplierRouter.delete("/delete-supplier/:id", authentication, validation(supplierValidation.getSupplierByIdSchema), supplierService.deleteSupplier)
+supplierRouter.post("/", authentication, validation(supplierValidation.createSupplierSchema), supplierService.addSupplier)
+supplierRouter.get("/", authentication, supplierService.getAllSuppliers)
+supplierRouter.get("/:id", authentication, validation(supplierValidation.getSupplierByIdSchema), supplierService.getSupplierById)
+supplierRouter.put("/:id", authentication, validation(supplierValidation.updateSupplierSchema), supplierService.updateSupplier)
+supplierRouter.delete("/:id", authentication, validation(supplierValidation.getSupplierByIdSchema), supplierService.deleteSupplier)
 
 export default supplierRouter

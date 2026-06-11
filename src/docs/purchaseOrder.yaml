@@ -3,7 +3,7 @@ tags:
     description: Manage purchase orders from suppliers
 
 paths:
-  /purchase-order/create-order:
+  /purchase-order:
     post:
       tags: [Purchase Orders]
       summary: Create a new purchase order

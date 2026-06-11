@@ -3,7 +3,7 @@ tags:
     description: Manage yarn stock inventory
 
 paths:
-  /yarn-stock/create:
+  /yarn-stock:
     post:
       tags: [Yarn Stock]
       summary: Create a new yarn stock entry

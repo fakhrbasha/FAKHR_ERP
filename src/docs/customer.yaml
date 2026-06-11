@@ -3,7 +3,7 @@ tags:
     description: Customer management endpoints
 
 paths:
-  /customers/add-customer:
+  /customers:
     post:
       tags: [Customers]
       summary: Add a new customer
@@ -94,7 +94,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /customers/delete-customer/{id}:
+  /customers/{id}:
     delete:
       tags: [Customers]
       summary: Delete a customer by ID
@@ -123,7 +123,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /customers/update-customer/{id}:
+  /customers/{id}:
     put:
       tags: [Customers]
       summary: Update a customer by ID

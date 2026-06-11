@@ -3,7 +3,7 @@ tags:
     description: Product management endpoints
 
 paths:
-  /products/add-product:
+  /products:
     post:
       tags: [Products]
       summary: Add a new product (with image upload)
@@ -163,7 +163,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /products/edit-product/{id}:
+  /products/{id}:
     put:
       tags: [Products]
       summary: Update a product by ID (with optional image upload)

@@ -3,7 +3,7 @@ tags:
     description: Expense management endpoints
 
 paths:
-  /expenses/add-expense:
+  /expenses:
     post:
       tags: [Expenses]
       summary: Add a new expense
@@ -94,7 +94,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /expenses/update-expense/{id}:
+  /expenses/{id}:
     put:
       tags: [Expenses]
       summary: Update an expense by ID
@@ -135,7 +135,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /expenses/delete-expense/{id}:
+  /expenses/{id}:
     delete:
       tags: [Expenses]
       summary: Delete an expense by ID

@@ -3,7 +3,7 @@ tags:
     description: Manage yarn colors
 
 paths:
-  /color/add-color:
+  /color:
     post:
       tags: [Color]
       summary: Add a new color
@@ -43,7 +43,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /color/update-color/{id}:
+  /color/{id}:
     put:
       tags: [Color]
       summary: Update a color
@@ -70,7 +70,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /color/delete-color/{id}:
+  /color/{id}:
     delete:
       tags: [Color]
       summary: Delete a color

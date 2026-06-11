@@ -3,7 +3,7 @@ tags:
     description: Manage employees
 
 paths:
-  /employee/create-employee/{departmentId}:
+  /employee/{departmentId}:
     post:
       tags: [Employee]
       summary: Create an employee in a department
@@ -51,7 +51,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /employee/get-employee-byId/{id}:
+  /employee/{id}:
     get:
       tags: [Employee]
       summary: Get employee by ID
@@ -72,7 +72,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /employee/update-employee/{id}:
+  /employee/{id}:
     put:
       tags: [Employee]
       summary: Update an employee
@@ -99,7 +99,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /employee/delete-employee/{id}:
+  /employee/{id}:
     delete:
       tags: [Employee]
       summary: Delete an employee

@@ -3,7 +3,7 @@ tags:
     description: Manage raw materials
 
 paths:
-  /material/add-material:
+  /material:
     post:
       tags: [Material]
       summary: Add a new material
@@ -64,7 +64,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /material/update-material/{id}:
+  /material/{id}:
     put:
       tags: [Material]
       summary: Update a material
@@ -91,7 +91,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /material/delete-material/{id}:
+  /material/{id}:
     delete:
       tags: [Material]
       summary: Delete a material

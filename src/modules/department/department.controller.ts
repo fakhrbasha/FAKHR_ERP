@@ -4,11 +4,11 @@ import * as departmentValidation from './department.validation'
 import { authentication } from "../../common/middleware/authentication";
 import departmentService from "./department.service";
 const departmentRouter = Router()
-departmentRouter.post('/create-department',
+departmentRouter.post('/',
     authentication,
     validation(departmentValidation.createDepartmentSchema),
     departmentService.createDepartment)
-departmentRouter.get('/all-departments',
+departmentRouter.get('/',
     authentication,
     departmentService.getAllDepartments)
 departmentRouter.get('/:id',
@@ -17,12 +17,12 @@ departmentRouter.get('/:id',
     departmentService.getAllDepartments)
 
 
-departmentRouter.put('/update-department/:id',
+departmentRouter.put('/:id',
     authentication,
     validation(departmentValidation.createDepartmentSchema),
     departmentService.updateDepartment)
 
-departmentRouter.delete('/delete-department/:id',
+departmentRouter.delete('/:id',
     authentication,
     validation(departmentValidation.getDeptSchemaById),
     departmentService.deleteDepartment)

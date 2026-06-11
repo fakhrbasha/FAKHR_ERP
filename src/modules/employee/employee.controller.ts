@@ -9,8 +9,8 @@ employeeRouter.post('/create-employee/:departmentId', authentication,
     EmployeeService.createEmployee)
 
 employeeRouter.get('/', authentication, EmployeeService.getEmployees)
-employeeRouter.get('/get-employee-byId/:id', authentication, validation(employeeValidation.getEmpById), EmployeeService.getEmployeeById)
-employeeRouter.delete('/delete-employee/:id', authentication, validation(employeeValidation.getEmpById), EmployeeService.deleteEmployee)
-employeeRouter.put('/update-employee/:id', authentication, validation(employeeValidation.getEmpById), EmployeeService.updateEmployee)
+employeeRouter.get('/:id', authentication, validation(employeeValidation.getEmpById), EmployeeService.getEmployeeById)
+employeeRouter.delete('/:id', authentication, validation(employeeValidation.getEmpById), EmployeeService.deleteEmployee)
+employeeRouter.put('/:id', authentication, validation(employeeValidation.getEmpById), EmployeeService.updateEmployee)
 
 export default employeeRouter
