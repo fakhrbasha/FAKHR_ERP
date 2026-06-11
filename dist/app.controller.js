@@ -29,14 +29,7 @@ const notification_controller_1 = __importDefault(require("./modules/notificatio
 const app = (0, express_1.default)();
 const port = config_service_1.PORT || 3000;
 app.use(express_1.default.json());
-app.get("/test", (req, res) => {
-    res.json({ ok: true });
-});
-app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpec, {
-    customSiteTitle: '🌋 Volcano API Docs',
-    customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::after { content: '🌋 Volcano API'; color: #e94560; font-size: 1.4rem; font-weight: 700; }`,
-    swaggerOptions: { persistAuthorization: true },
-}));
+app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpec));
 app.get('/api-docs.json', (_req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swagger_config_1.swaggerSpec);
