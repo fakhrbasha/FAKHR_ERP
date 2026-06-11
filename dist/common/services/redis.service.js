@@ -12,8 +12,10 @@ class RedisService {
         this.handleEvent();
     }
     async connect() {
-        this.client.connect();
-        console.log("connected to redis successfully");
+        if (!this.client.isOpen) {
+            await this.client.connect();
+            console.log("connected to redis successfully");
+        }
     }
     handleEvent() {
         this.client.on("error", (err) => {

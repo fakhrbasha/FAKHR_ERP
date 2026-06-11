@@ -38,8 +38,11 @@ app.get('/api-docs.json', (_req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swagger_config_1.swaggerSpec);
 });
-(0, connectionDB_1.CheckConnectionDB)();
-redis_service_1.default.connect();
+app.use(async (req, res, next) => {
+    await (0, connectionDB_1.connectDB)();
+    await redis_service_1.default.connect();
+    next();
+});
 app.use('/auth', auth_controller_1.default);
 app.use('/department', department_controller_1.default);
 app.use('/attendance', attendance_controller_1.default);
