@@ -35,12 +35,10 @@ class UserService {
             throw new AppError(`you have exceeded the maximum number of attempts to resend otp please try again later after 300 seconds`, 429)
         }
         const otp = await sendOtp()
-        eventEmitter.emit(EmailEnum.confirmedEmail, async () => {
-            await sendEmail({
-                to: email,
-                subject: "Social-media App",
-                html: templateEmail(otp)
-            })
+        await sendEmail({
+            to: email,
+            subject: "Social-media App",
+            html: templateEmail(otp)
         })
 
         await this._redisService.setValue({ key: this._redisService.otpKey({ email }), value: Hash({ plan_text: `${otp}` }), ttl: 60 * 10 })
@@ -61,15 +59,13 @@ class UserService {
         }
 
         const otp = await sendOtp()
-        eventEmitter.emit(EmailEnum.confirmedEmail, async () => {
-            await sendEmail({
-                to: email,
-                subject: "Email Confirmation",
-                html: templateEmail(otp)
-            })
-            await this._redisService.setValue({ key: this._redisService.otpKey({ email, subject: EmailEnum.confirmedEmail }), value: Hash({ plan_text: `${otp}` }), ttl: 60 * 5 })
-            await this._redisService.setValue({ key: this._redisService.max_otp_key({ email }), value: "1", ttl: 60 * 30 })
+        await sendEmail({
+            to: email,
+            subject: "Email Confirmation",
+            html: templateEmail(otp)
         })
+        await this._redisService.setValue({ key: this._redisService.otpKey({ email, subject: EmailEnum.confirmedEmail }), value: Hash({ plan_text: `${otp}` }), ttl: 60 * 5 })
+        await this._redisService.setValue({ key: this._redisService.max_otp_key({ email }), value: "1", ttl: 60 * 30 })
         const user: HydratedDocument<IUser> = await this._userModel.create({
             userName,
             email,

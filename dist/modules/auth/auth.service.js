@@ -8,7 +8,6 @@ const redis_service_1 = __importDefault(require("../../common/services/redis.ser
 const user_enum_1 = require("../../common/enums/user.enum");
 const global_error_handling_1 = require("../../common/utils/global-error-handling");
 const nodeMailer_1 = require("../../common/utils/email/nodeMailer");
-const email_event_1 = require("../../common/utils/email/email.event");
 const email_tamplete_1 = require("../../common/utils/email/email.tamplete");
 const hash_1 = require("../../common/utils/security/hash");
 const encrypt_1 = require("../../common/utils/security/encrypt");
@@ -35,12 +34,10 @@ class UserService {
             throw new global_error_handling_1.AppError(`you have exceeded the maximum number of attempts to resend otp please try again later after 300 seconds`, 429);
         }
         const otp = await (0, nodeMailer_1.sendOtp)();
-        email_event_1.eventEmitter.emit(user_enum_1.EmailEnum.confirmedEmail, async () => {
-            await (0, nodeMailer_1.sendEmail)({
-                to: email,
-                subject: "Social-media App",
-                html: (0, email_tamplete_1.templateEmail)(otp)
-            });
+        await (0, nodeMailer_1.sendEmail)({
+            to: email,
+            subject: "Social-media App",
+            html: (0, email_tamplete_1.templateEmail)(otp)
         });
         await this._redisService.setValue({ key: this._redisService.otpKey({ email }), value: (0, hash_1.Hash)({ plan_text: `${otp}` }), ttl: 60 * 10 });
         await this._redisService.increment({ key: email });
@@ -54,15 +51,13 @@ class UserService {
             throw new global_error_handling_1.AppError("This email already Exist", 400);
         }
         const otp = await (0, nodeMailer_1.sendOtp)();
-        email_event_1.eventEmitter.emit(user_enum_1.EmailEnum.confirmedEmail, async () => {
-            await (0, nodeMailer_1.sendEmail)({
-                to: email,
-                subject: "Email Confirmation",
-                html: (0, email_tamplete_1.templateEmail)(otp)
-            });
-            await this._redisService.setValue({ key: this._redisService.otpKey({ email, subject: user_enum_1.EmailEnum.confirmedEmail }), value: (0, hash_1.Hash)({ plan_text: `${otp}` }), ttl: 60 * 5 });
-            await this._redisService.setValue({ key: this._redisService.max_otp_key({ email }), value: "1", ttl: 60 * 30 });
+        await (0, nodeMailer_1.sendEmail)({
+            to: email,
+            subject: "Email Confirmation",
+            html: (0, email_tamplete_1.templateEmail)(otp)
         });
+        await this._redisService.setValue({ key: this._redisService.otpKey({ email, subject: user_enum_1.EmailEnum.confirmedEmail }), value: (0, hash_1.Hash)({ plan_text: `${otp}` }), ttl: 60 * 5 });
+        await this._redisService.setValue({ key: this._redisService.max_otp_key({ email }), value: "1", ttl: 60 * 30 });
         const user = await this._userModel.create({
             userName,
             email,
