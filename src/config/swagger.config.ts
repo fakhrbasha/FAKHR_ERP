@@ -15,13 +15,9 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: "/",
-      description: "Current Server",
-    },
-    {
-      url: "http://localhost:3000",
-      description: "Development Server",
-    },
+      url: "https://volcano-pi.vercel.app",
+      description: "Production Server",
+    }
   ],
   components: {
     securitySchemes: {
