@@ -37,10 +37,11 @@ app.get('/api-docs.json', (_req: Request, res: Response) => {
 });
 app.use(async (req, res, next) => {
     await connectDB();
+    await redisService.connect();
     next();
 });
 // CheckConnectionDB()
-redisService.connect()
+// redisService.connect()
 
 app.use('/auth', authRouter)
 app.use('/department', departmentRouter)
