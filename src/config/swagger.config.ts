@@ -10,7 +10,7 @@ const swaggerDefinition = {
       "Complete REST API documentation for the Volcano warehouse & employee management system.",
     contact: {
       name: "Fakhr Basha",
-      email: "fakhrbasha8@gmail.com",
+      email: "ahmedmhmdsala@gmail.com",
     },
   },
   servers: [
