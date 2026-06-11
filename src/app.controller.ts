@@ -20,6 +20,7 @@ import expensesRouter from "./modules/expenses/expenses.controller";
 import dashboardRouter from "./modules/dashboard/dashboard.controller";
 import reportsRouter from "./modules/Reports/Reports.controller";
 import notificationRouter from "./modules/notification/notification.controller";
+import { apiReference } from "@scalar/express-api-reference";
 const app: express.Application = express();
 const port = PORT || 3000
 app.use(express.json());
@@ -39,10 +40,18 @@ app.use(express.json());
 //     swaggerUi.serve,
 //     swaggerUi.setup(swaggerSpec)
 // );
+// app.use(
+//     "/api-docs",
+//     swaggerUi.serveFiles(swaggerSpec),
+//     swaggerUi.setup(swaggerSpec)
+// );
 app.use(
-    "/api-docs",
-    swaggerUi.serveFiles(swaggerSpec),
-    swaggerUi.setup(swaggerSpec)
+    "/docs",
+    apiReference({
+        spec: {
+            url: "/api-docs.json",
+        },
+    })
 );
 app.get('/api-docs.json', (_req: Request, res: Response) => {
     res.setHeader('Content-Type', 'application/json');

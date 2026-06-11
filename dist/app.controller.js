@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bootstrap = void 0;
 const express_1 = __importDefault(require("express"));
-const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const connectionDB_1 = require("./DB/connectionDB");
 const global_error_handling_1 = require("./common/utils/global-error-handling");
 const config_service_1 = require("./config/config.service");
@@ -26,10 +25,15 @@ const expenses_controller_1 = __importDefault(require("./modules/expenses/expens
 const dashboard_controller_1 = __importDefault(require("./modules/dashboard/dashboard.controller"));
 const Reports_controller_1 = __importDefault(require("./modules/Reports/Reports.controller"));
 const notification_controller_1 = __importDefault(require("./modules/notification/notification.controller"));
+const express_api_reference_1 = require("@scalar/express-api-reference");
 const app = (0, express_1.default)();
 const port = config_service_1.PORT || 3000;
 app.use(express_1.default.json());
-app.use("/api-docs", swagger_ui_express_1.default.serveFiles(swagger_config_1.swaggerSpec), swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpec));
+app.use("/docs", (0, express_api_reference_1.apiReference)({
+    spec: {
+        url: "/api-docs.json",
+    },
+}));
 app.get('/api-docs.json', (_req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swagger_config_1.swaggerSpec);
