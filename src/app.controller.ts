@@ -20,39 +20,17 @@ import expensesRouter from "./modules/expenses/expenses.controller";
 import dashboardRouter from "./modules/dashboard/dashboard.controller";
 import reportsRouter from "./modules/Reports/Reports.controller";
 import notificationRouter from "./modules/notification/notification.controller";
-import { apiReference } from "@scalar/express-api-reference";
 const app: express.Application = express();
 const port = PORT || 3000
 app.use(express.json());
 
 // ─── Swagger UI ──────────────────────────────────────────────────────────────
 // console.log(JSON.stringify(swaggerSpec, null, 2));
-// app.get("/test", (req, res) => {
-//     res.json({ ok: true });
-// });
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-//     customSiteTitle: '🌋 Volcano API Docs',
-//     customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::after { content: '🌋 Volcano API'; color: #e94560; font-size: 1.4rem; font-weight: 700; }`,
-//     swaggerOptions: { persistAuthorization: true },
-// }));
-// app.use(
-//     "/api-docs",
-//     swaggerUi.serve,
-//     swaggerUi.setup(swaggerSpec)
-// );
-// app.use(
-//     "/api-docs",
-//     swaggerUi.serveFiles(swaggerSpec),
-//     swaggerUi.setup(swaggerSpec)
-// );
-app.use(
-    "/docs",
-    apiReference({
-        spec: {
-            url: "/api-docs.json",
-        },
-    })
-);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: '🌋 Volcano API Docs',
+    customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::after { content: '🌋 Volcano API'; color: #e94560; font-size: 1.4rem; font-weight: 700; }`,
+    swaggerOptions: { persistAuthorization: true },
+}));
 app.get('/api-docs.json', (_req: Request, res: Response) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
