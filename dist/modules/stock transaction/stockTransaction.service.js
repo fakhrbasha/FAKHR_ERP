@@ -13,7 +13,7 @@ const email_event_1 = require("../../common/utils/email/email.event");
 const user_enum_1 = require("../../common/enums/user.enum");
 const stockTransaction_repository_1 = __importDefault(require("../../DB/repository/stockTransaction.repository"));
 const stockTransaction_model_1 = require("../../DB/models/stockTransaction.model");
-class StockService {
+class StockTransactionService {
     _stockModel = new stock_repository_1.default();
     _stockTransactionModel = new stockTransaction_repository_1.default();
     _materialModel = new material_repository_1.default();
@@ -161,4 +161,4 @@ class StockService {
         });
     };
 }
-exports.default = new StockService();
+exports.default = new StockTransactionService();

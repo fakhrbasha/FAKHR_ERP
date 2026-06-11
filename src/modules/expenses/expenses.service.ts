@@ -12,7 +12,7 @@ import { IExpenses } from "../../DB/models/expenses.model"
 
 
 
-class SupplierService {
+class ExpensesService {
 
 
 
@@ -176,4 +176,4 @@ class SupplierService {
 
 }
 
-export default new SupplierService()
+export default new ExpensesService()

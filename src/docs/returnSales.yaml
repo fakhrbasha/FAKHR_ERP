@@ -1,0 +1,57 @@
+tags:
+  - name: Return Sales
+    description: Operations related to returning sales orders
+
+paths:
+  /return-sales:
+    get:
+      summary: Get all return sales orders
+      tags: [Return Sales]
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: A list of return sales orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+    post:
+      summary: Create a new return sale order
+      tags: [Return Sales]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateReturnSaleBody"
+      responses:
+        "201":
+          description: Return sale order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /return-sales/{id}:
+    get:
+      summary: Get a return sale order by ID
+      tags: [Return Sales]
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Return sale order ID
+      responses:
+        "200":
+          description: Return sale order details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"

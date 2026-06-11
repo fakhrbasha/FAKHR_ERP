@@ -11,7 +11,7 @@ import NotificationRepository from "../../DB/repository/notification.repository"
 
 
 
-class SupplierService {
+class NotificationsService {
 
 
 
@@ -103,4 +103,4 @@ class SupplierService {
     };
 }
 
-export default new SupplierService()
+export default new NotificationsService()

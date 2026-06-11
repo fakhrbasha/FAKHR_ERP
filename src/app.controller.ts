@@ -20,6 +20,9 @@ import expensesRouter from "./modules/expenses/expenses.controller";
 import dashboardRouter from "./modules/dashboard/dashboard.controller";
 import reportsRouter from "./modules/Reports/Reports.controller";
 import notificationRouter from "./modules/notification/notification.controller";
+// import { checkConnection } from "./DB/connectionDB";
+import salesRouter from "./modules/sales/sales.controller";
+import returnSalesRouter from "./modules/return sales/returnSales.controller";
 const app: express.Application = express();
 const port = PORT || 3000
 app.use(express.json());
@@ -40,7 +43,7 @@ app.use(async (req, res, next) => {
     await redisService.connect();
     next();
 });
-// CheckConnectionDB()
+// checkConnection()
 // redisService.connect()
 
 app.use('/auth', authRouter)
@@ -58,6 +61,8 @@ app.use('/expenses', expensesRouter)
 app.use('/dashboard', dashboardRouter)
 app.use('/reports', reportsRouter)
 app.use('/notifications', notificationRouter)
+app.use('/sales', salesRouter)
+app.use('/return-sales', returnSalesRouter)
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({ message: "Welcome Fakhr In Your Home" })
 })

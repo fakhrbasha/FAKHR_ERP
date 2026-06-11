@@ -44,7 +44,7 @@ const yarnStock_service_1 = __importDefault(require("./yarnStock.service"));
 const stockTransaction_controller_1 = __importDefault(require("../stock transaction/stockTransaction.controller"));
 const yarnStockRouter = (0, express_1.Router)();
 yarnStockRouter.use("/transaction/:stockId/", stockTransaction_controller_1.default);
-yarnStockRouter.post("/create", authentication_1.authentication, (0, validation_1.validation)(yarnStockValidation.addYarnStockSchema), yarnStock_service_1.default.createYarnStock);
+yarnStockRouter.post("/", authentication_1.authentication, (0, validation_1.validation)(yarnStockValidation.addYarnStockSchema), yarnStock_service_1.default.createYarnStock);
 yarnStockRouter.get("/", authentication_1.authentication, yarnStock_service_1.default.getAllYarnStock);
 yarnStockRouter.delete("/:id", authentication_1.authentication, yarnStock_service_1.default.deleteYarnStock);
 yarnStockRouter.get("/:id", authentication_1.authentication, yarnStock_service_1.default.getYarnStockById);

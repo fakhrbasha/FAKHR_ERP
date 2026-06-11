@@ -20,7 +20,7 @@ import { TransactionStock_Enum } from "../../DB/models/stockTransaction.model"
 
 
 
-class StockService {
+class StockTransactionService {
 
 
 
@@ -245,4 +245,4 @@ class StockService {
     }
 }
 
-export default new StockService()
+export default new StockTransactionService()

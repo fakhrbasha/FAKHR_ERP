@@ -1,0 +1,57 @@
+tags:
+  - name: Sales
+    description: Operations related to sales orders
+
+paths:
+  /sales:
+    get:
+      summary: Get all sales orders
+      tags: [Sales]
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: A list of sales orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+    post:
+      summary: Create a new sale order
+      tags: [Sales]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSaleBody"
+      responses:
+        "201":
+          description: Sale order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /sales/{id}:
+    get:
+      summary: Get a sale order by ID
+      tags: [Sales]
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Sale order ID
+      responses:
+        "200":
+          description: Sale order details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"

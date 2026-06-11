@@ -296,6 +296,50 @@ const swaggerDefinition = {
           isActive: { type: "boolean", example: true },
         },
       },
+      // ─── Sales ───────────────────────────────────────────────
+      CreateSaleBody: {
+        type: "object",
+        required: ["customerId", "items"],
+        properties: {
+          customerId: { type: "string", example: "664f1c2e3a1b2c3d4e5f6a7d" },
+          items: {
+            type: "array",
+            minItems: 1,
+            items: {
+              type: "object",
+              required: ["productId", "quantity", "unitPrice"],
+              properties: {
+                productId: { type: "string", example: "664f1c2e3a1b2c3d4e5f6a7b" },
+                quantity: { type: "number", minimum: 1, example: 5 },
+                unitPrice: { type: "number", minimum: 0.01, example: 150 },
+              }
+            }
+          },
+          note: { type: "string", example: "Deliver after 5 PM" },
+        },
+      },
+      // ─── Return Sales ────────────────────────────────────────
+      CreateReturnSaleBody: {
+        type: "object",
+        required: ["saleId", "items"],
+        properties: {
+          saleId: { type: "string", example: "664f1c2e3a1b2c3d4e5f6a7f" },
+          items: {
+            type: "array",
+            minItems: 1,
+            items: {
+              type: "object",
+              required: ["productId", "quantity"],
+              properties: {
+                productId: { type: "string", example: "664f1c2e3a1b2c3d4e5f6a7b" },
+                quantity: { type: "number", minimum: 1, example: 2 },
+                reason: { type: "string", example: "Defective item" },
+              }
+            }
+          },
+          note: { type: "string", example: "Refund requested" },
+        },
+      },
       // ─── Generic Responses ───────────────────────────────────
       SuccessResponse: {
         type: "object",

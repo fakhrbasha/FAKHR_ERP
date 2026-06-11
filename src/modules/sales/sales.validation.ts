@@ -1,18 +1,45 @@
 import { z } from 'zod'
 import { generalRules } from '../../common/utils/generalRules'
-export const createSupplierSchema = {
+import mongoose from "mongoose";
+
+const objectIdValidation = (value: string) =>
+    mongoose.Types.ObjectId.isValid(value);
+
+export const createSaleSchema = {
     body: z.object({
-        companyName: z.string().min(2).max(100),
-        contactPerson: z.string().min(2).max(100),
-        email: z.string().email().optional(),
-        phone: z.string().min(10).max(15),
-        address: z.string().max(200).optional(),
-        note: z.string().max(200).optional()
+        customerId: z
+            .string()
+            .refine(objectIdValidation, {
+                message: "Invalid customer id"
+            }),
+
+        items: z
+            .array(
+                z.object({
+                    productId: z
+                        .string()
+                        .refine(objectIdValidation, {
+                            message: "Invalid product id"
+                        }),
+
+                    quantity: z
+                        .number()
+                        .positive("Quantity must be greater than 0"),
+
+                    unitPrice: z
+                        .number()
+                        .positive("Unit price must be greater than 0")
+                })
+            )
+            .min(1, "At least one product is required"),
+
+        note: z
+            .string()
+            .max(500)
+            .optional()
     })
-
-}
-
-export const getSupplierByIdSchema = {
+};
+export const getSaleByIdSchema = {
     params: z.object({
         id: generalRules.id
     })

@@ -9,7 +9,7 @@ const employee_repository_1 = __importDefault(require("../../DB/repository/emplo
 const supplier_repository_1 = __importDefault(require("../../DB/repository/supplier.repository"));
 const success_response_1 = require("../../common/utils/success.response");
 const notification_repository_1 = __importDefault(require("../../DB/repository/notification.repository"));
-class SupplierService {
+class NotificationsService {
     _attendanceModel = new attendance_repository_1.default();
     _employeeModel = new employee_repository_1.default();
     _supplierModel = new supplier_repository_1.default();
@@ -71,4 +71,4 @@ class SupplierService {
         });
     };
 }
-exports.default = new SupplierService();
+exports.default = new NotificationsService();

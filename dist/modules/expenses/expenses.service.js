@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const global_error_handling_1 = require("../../common/utils/global-error-handling");
 const success_response_1 = require("../../common/utils/success.response");
 const expenses_repository_1 = __importDefault(require("../../DB/repository/expenses.repository"));
-class SupplierService {
+class ExpensesService {
     _expenseModel = new expenses_repository_1.default();
     addExpenses = async (req, res, next) => {
         const { title, amount, category, expenseDate, note } = req.body;
@@ -97,4 +97,4 @@ class SupplierService {
         (0, success_response_1.successResponse)({ res, status: 200, message: "Expense Updated successfully", data: updateExpense });
     };
 }
-exports.default = new SupplierService();
+exports.default = new ExpensesService();

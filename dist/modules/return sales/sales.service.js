@@ -8,7 +8,7 @@ const customer_repository_1 = __importDefault(require("../../DB/repository/custo
 const global_error_handling_1 = require("../../common/utils/global-error-handling");
 const product_repository_1 = __importDefault(require("../../DB/repository/product.repository"));
 const sales_repository_1 = __importDefault(require("../../DB/repository/sales.repository"));
-class SalesService {
+class SupplierService {
     _customerModel = new customer_repository_1.default();
     _saleModel = new sales_repository_1.default();
     _productModel = new product_repository_1.default();
@@ -53,35 +53,23 @@ class SalesService {
     getSalesOrders = async (req, res, next) => {
         const page = Number(req.query.page);
         const limit = Number(req.query.limit);
-        const sales = await this._saleModel.paginate({
-            page, limit,
-            populate: [
-                {
-                    path: "customerId",
-                },
-                {
-                    path: "createdBy",
-                    select: "firstName lastName email"
+        const searchQuery = req.query.search
+            ? {
+                customerId: {
+                    $regex: req.query.search,
+                    $options: "i"
                 }
-            ]
+            }
+            : {};
+        const sales = await this._saleModel.paginate({
+            page, limit, search: searchQuery
         });
         (0, success_response_1.successResponse)({ res, message: "Sales Orders Fetched Successfully", data: sales });
     };
     getSaleById = async (req, res, next) => {
         const { id } = req.params;
         const sale = await this._saleModel.findOne({
-            filter: { _id: id },
-            options: {
-                populate: [
-                    {
-                        path: "customerId"
-                    },
-                    {
-                        path: "createdBy",
-                        select: "firstName lastName email"
-                    }
-                ]
-            }
+            filter: { _id: id }
         });
         if (!sale) {
             throw new global_error_handling_1.AppError("Sale Order Not Found", 404);
@@ -89,4 +77,4 @@ class SalesService {
         (0, success_response_1.successResponse)({ res, message: "Order Fetched", data: sale });
     };
 }
-exports.default = new SalesService();
+exports.default = new SupplierService();
