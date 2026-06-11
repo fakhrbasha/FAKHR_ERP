@@ -36,7 +36,7 @@ class UserService {
         const otp = await (0, nodeMailer_1.sendOtp)();
         await (0, nodeMailer_1.sendEmail)({
             to: email,
-            subject: "Social-media App",
+            subject: "Volcano App",
             html: (0, email_tamplete_1.templateEmail)(otp)
         });
         await this._redisService.setValue({ key: this._redisService.otpKey({ email }), value: (0, hash_1.Hash)({ plan_text: `${otp}` }), ttl: 60 * 10 });
@@ -66,7 +66,7 @@ class UserService {
             phone: phone ? (0, encrypt_1.encrypt)(phone) : undefined,
             isConfirmed
         });
-        res.status(200).json({
+        res.status(201).json({
             message: "User signed up successfully", data: user
         });
     };
@@ -124,7 +124,7 @@ class UserService {
             throw new global_error_handling_1.AppError("User Not Exist", 400);
         }
         await this.sendEmailOtp({ email, subject: user_enum_1.EmailEnum.confirmedEmail });
-        return res.status(200).json({ message: "message otp send successfully" });
+        return res.status(201).json({ message: "message otp send successfully" });
     };
     forgetPassword = async (req, res, next) => {
         const { email } = req.body;
@@ -139,7 +139,7 @@ class UserService {
             html: (0, email_tamplete_1.templateEmail)(otp)
         });
         await this._redisService.setValue({ key: this._redisService.otpKey({ email, subject: user_enum_1.EmailEnum.forgetPassword }), value: (0, hash_1.Hash)({ plan_text: `${otp}` }), ttl: 60 * 10 });
-        res.status(200).json({
+        res.status(201).json({
             message: "OTP sent to email successfully"
         });
     };
@@ -173,7 +173,7 @@ class UserService {
         const hashPassword = (0, hash_1.Hash)({ plan_text: newPassword });
         req.user.password = hashPassword;
         await req.user.save();
-        res.status(200).json({
+        res.status(201).json({
             message: "Password updated successfully"
         });
     };

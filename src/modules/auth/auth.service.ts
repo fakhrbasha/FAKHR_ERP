@@ -37,7 +37,7 @@ class UserService {
         const otp = await sendOtp()
         await sendEmail({
             to: email,
-            subject: "Social-media App",
+            subject: "Volcano App",
             html: templateEmail(otp)
         })
 
@@ -74,7 +74,7 @@ class UserService {
             phone: phone ? encrypt(phone) : undefined,
             isConfirmed
         })
-        res.status(200).json({
+        res.status(201).json({
             message: "User signed up successfully", data: user
         })
     }
@@ -142,7 +142,7 @@ class UserService {
             throw new AppError("User Not Exist", 400)
         }
         await this.sendEmailOtp({ email, subject: EmailEnum.confirmedEmail })
-        return res.status(200).json({ message: "message otp send successfully" })
+        return res.status(201).json({ message: "message otp send successfully" })
     }
 
     // forget pass
@@ -161,7 +161,7 @@ class UserService {
         })
 
         await this._redisService.setValue({ key: this._redisService.otpKey({ email, subject: EmailEnum.forgetPassword }), value: Hash({ plan_text: `${otp}` }), ttl: 60 * 10 })
-        res.status(200).json({
+        res.status(201).json({
             message: "OTP sent to email successfully"
         })
     }
@@ -215,7 +215,7 @@ class UserService {
 
         req.user!.password = hashPassword
         await req.user!.save()
-        res.status(200).json({
+        res.status(201).json({
             message: "Password updated successfully"
         });
     }
