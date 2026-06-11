@@ -25,6 +25,10 @@ const port = PORT || 3000
 app.use(express.json());
 
 // ─── Swagger UI ──────────────────────────────────────────────────────────────
+// console.log(JSON.stringify(swaggerSpec, null, 2));
+app.get("/test", (req, res) => {
+    res.json({ ok: true });
+});
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
     customSiteTitle: '🌋 Volcano API Docs',
     customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::after { content: '🌋 Volcano API'; color: #e94560; font-size: 1.4rem; font-weight: 700; }`,
@@ -38,24 +42,24 @@ app.get('/api-docs.json', (_req: Request, res: Response) => {
 CheckConnectionDB()
 redisService.connect()
 
-    app.use('/auth', authRouter)
-    app.use('/department', departmentRouter)
-    app.use('/attendance', attendanceRouter)
-    app.use('/employee', employeeRouter)
-    app.use('/material', materialRouter)
-    app.use('/color', colorRouter)
-    app.use('/yarn-stock', yarnStockRouter)
-    app.use('/suppliers', supplierRouter)
-    app.use('/purchase-order', purchaseOrderRouter)
-    app.use('/products', productRouter)
-    app.use('/customers', customerRouter)
-    app.use('/expenses', expensesRouter)
-    app.use('/dashboard', dashboardRouter)
-    app.use('/reports', reportsRouter)
-    app.use('/notifications', notificationRouter)
-    app.get('/', (req: Request, res: Response) => {
-        res.status(200).json({ message: "Welcome Fakhr In Your Home" })
-    })
+app.use('/auth', authRouter)
+app.use('/department', departmentRouter)
+app.use('/attendance', attendanceRouter)
+app.use('/employee', employeeRouter)
+app.use('/material', materialRouter)
+app.use('/color', colorRouter)
+app.use('/yarn-stock', yarnStockRouter)
+app.use('/suppliers', supplierRouter)
+app.use('/purchase-order', purchaseOrderRouter)
+app.use('/products', productRouter)
+app.use('/customers', customerRouter)
+app.use('/expenses', expensesRouter)
+app.use('/dashboard', dashboardRouter)
+app.use('/reports', reportsRouter)
+app.use('/notifications', notificationRouter)
+app.get('/', (req: Request, res: Response) => {
+    res.status(200).json({ message: "Welcome Fakhr In Your Home" })
+})
 app.use(globalErrorHandler);
 app.use("{/*demo}", (req: Request, res: Response, next: NextFunction) => {
     throw new AppError(`Invalid URL ${req.originalUrl} with method ${req.method} not found`, 404)

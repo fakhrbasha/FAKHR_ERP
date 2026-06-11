@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.bootstrap = void 0;
 const express_1 = __importDefault(require("express"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const connectionDB_1 = require("./DB/connectionDB");
@@ -27,45 +28,49 @@ const Reports_controller_1 = __importDefault(require("./modules/Reports/Reports.
 const notification_controller_1 = __importDefault(require("./modules/notification/notification.controller"));
 const app = (0, express_1.default)();
 const port = config_service_1.PORT || 3000;
+app.use(express_1.default.json());
+app.get("/test", (req, res) => {
+    res.json({ ok: true });
+});
+app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpec, {
+    customSiteTitle: '🌋 Volcano API Docs',
+    customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::after { content: '🌋 Volcano API'; color: #e94560; font-size: 1.4rem; font-weight: 700; }`,
+    swaggerOptions: { persistAuthorization: true },
+}));
+app.get('/api-docs.json', (_req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swagger_config_1.swaggerSpec);
+});
+(0, connectionDB_1.CheckConnectionDB)();
+redis_service_1.default.connect();
+app.use('/auth', auth_controller_1.default);
+app.use('/department', department_controller_1.default);
+app.use('/attendance', attendance_controller_1.default);
+app.use('/employee', employee_controller_1.default);
+app.use('/material', material_controller_1.default);
+app.use('/color', Color_controller_1.default);
+app.use('/yarn-stock', yarnStock_controller_1.default);
+app.use('/suppliers', supplier_controller_1.default);
+app.use('/purchase-order', PurchaseOrder_controller_1.default);
+app.use('/products', product_controller_1.default);
+app.use('/customers', Customer_controller_1.default);
+app.use('/expenses', expenses_controller_1.default);
+app.use('/dashboard', dashboard_controller_1.default);
+app.use('/reports', Reports_controller_1.default);
+app.use('/notifications', notification_controller_1.default);
+app.get('/', (req, res) => {
+    res.status(200).json({ message: "Welcome Fakhr In Your Home" });
+});
+app.use(global_error_handling_1.globalErrorHandler);
+app.use("{/*demo}", (req, res, next) => {
+    throw new global_error_handling_1.AppError(`Invalid URL ${req.originalUrl} with method ${req.method} not found`, 404);
+});
 const bootstrap = () => {
-    app.use(express_1.default.json());
-    app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpec, {
-        customSiteTitle: '🌋 Volcano API Docs',
-        customCss: `.swagger-ui .topbar { background-color: #1a1a2e; } .swagger-ui .topbar-wrapper img { content: none; } .swagger-ui .topbar-wrapper::after { content: '🌋 Volcano API'; color: #e94560; font-size: 1.4rem; font-weight: 700; }`,
-        swaggerOptions: { persistAuthorization: true },
-    }));
-    app.get('/api-docs.json', (_req, res) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(swagger_config_1.swaggerSpec);
-    });
-    (0, connectionDB_1.CheckConnectionDB)();
-    redis_service_1.default.connect();
-    app.use('/auth', auth_controller_1.default);
-    app.use('/department', department_controller_1.default);
-    app.use('/attendance', attendance_controller_1.default);
-    app.use('/employee', employee_controller_1.default);
-    app.use('/material', material_controller_1.default);
-    app.use('/color', Color_controller_1.default);
-    app.use('/yarn-stock', yarnStock_controller_1.default);
-    app.use('/suppliers', supplier_controller_1.default);
-    app.use('/purchase-order', PurchaseOrder_controller_1.default);
-    app.use('/products', product_controller_1.default);
-    app.use('/customers', Customer_controller_1.default);
-    app.use('/expenses', expenses_controller_1.default);
-    app.use('/dashboard', dashboard_controller_1.default);
-    app.use('/reports', Reports_controller_1.default);
-    app.use('/notifications', notification_controller_1.default);
-    app.get('/', (req, res) => {
-        res.status(200).json({ message: "Welcome Fakhr In Your Home" });
-    });
-    app.use(global_error_handling_1.globalErrorHandler);
-    app.use("{/*demo}", (req, res, next) => {
-        throw new global_error_handling_1.AppError(`Invalid URL ${req.originalUrl} with method ${req.method} not found`, 404);
-    });
     app.listen(port, () => {
         console.log(`✅ Server is running on port ${port}`);
         console.log(`📄 Swagger docs  → http://localhost:${port}/api-docs`);
         console.log(`🔗 API JSON spec → http://localhost:${port}/api-docs.json`);
     });
 };
-exports.default = bootstrap;
+exports.bootstrap = bootstrap;
+exports.default = app;
