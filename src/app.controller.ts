@@ -23,6 +23,7 @@ import notificationRouter from "./modules/notification/notification.controller";
 // import { checkConnection } from "./DB/connectionDB";
 import salesRouter from "./modules/sales/sales.controller";
 import returnSalesRouter from "./modules/return sales/returnSales.controller";
+import accountingRouter from "./modules/accounting/accounting.controller";
 const app: express.Application = express();
 const port = PORT || 3000
 app.use(express.json());
@@ -63,6 +64,7 @@ app.use('/reports', reportsRouter)
 app.use('/notifications', notificationRouter)
 app.use('/sales', salesRouter)
 app.use('/return-sales', returnSalesRouter)
+app.use('/accounting', accountingRouter)
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({ message: "Welcome Fakhr In Your Home" })
 })

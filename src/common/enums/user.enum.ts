@@ -1,9 +1,15 @@
 
+// export enum RoleEnum {
+//     user = "user",
+//     admin = "admin"
+// }
 export enum RoleEnum {
-    user = "user",
-    admin = "admin"
+    ADMIN = "ADMIN",
+    user = "USER",
+    MANAGER = "MANAGER",
+    STORE_KEEPER = "STORE_KEEPER",
+    ACCOUNTANT = "ACCOUNTANT"
 }
-
 export enum EmailEnum {
     confirmedEmail = "confirmedEmail",
     forgetPassword = "forgetPassword",

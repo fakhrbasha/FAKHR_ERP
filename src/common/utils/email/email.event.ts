@@ -6,6 +6,7 @@ import { IColor } from "../../../DB/models/color.model";
 import { IMaterial } from "../../../DB/models/materials.model";
 import { NotificationType } from "../../../DB/models/notifications.model";
 import NotificationRepository from "../../../DB/repository/notification.repository";
+import { templateLowStock } from "./lowStock..templete";
 export enum NotificationEventEnum {
     LOW_STOCK = "LOW_STOCK_NOTIFICATION",
 
@@ -43,14 +44,12 @@ eventEmitter.on(
         await sendEmail({
             to: WAREHOUSE_EMAIL!,
             subject: "Low Stock Alert",
-            html: `
-                <h2>Low Stock Alert</h2>
-                <p>Material: ${material.name}</p>
-                <p>Color: ${color.name}</p>
-                <p>Current Quantity: ${newQuantity}</p>
-                <p>Minimum Quantity: ${stock.minQuantity}</p>
-                <p>Please restock this item as soon as possible.</p>
-            `,
+            html: templateLowStock({
+                materialName: material.name,
+                colorName: color.name,
+                currentQuantity: newQuantity,
+                minQuantity: stock.minQuantity,
+            })
         });
     }
 );

@@ -3,9 +3,14 @@ import { validation } from "../../common/middleware/validation";
 import * as userValidation from "./auth.validation";
 import UserService from './auth.service'
 import { authentication } from "../../common/middleware/authentication";
+import { authorization } from "../../common/middleware/authorization";
+import { RoleEnum } from "../../common/enums/user.enum";
 const authRouter = Router()
 
 authRouter.post("/register", validation(userValidation.registerSchema), UserService.register)
+authRouter.post("/users", authentication, authorization(RoleEnum.ADMIN), validation(userValidation.createUser), UserService.createUser)
+authRouter.delete("/users/:id", authentication, authorization(RoleEnum.ADMIN), validation(userValidation.deleteUser), UserService.deleteUser)
+authRouter.post("/users/:id/role", authentication, authorization(RoleEnum.ADMIN), validation(userValidation.updateRole), UserService.updateUserRole)
 authRouter.post("/confirm-email", validation(userValidation.confirmEmailSchema), UserService.confirmEmail)
 authRouter.post("/login", validation(userValidation.loginSchema), UserService.login)
 authRouter.post("/resend-otp", validation(userValidation.resendOtpSchema), UserService.resendOtp)

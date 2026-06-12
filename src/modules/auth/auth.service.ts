@@ -14,6 +14,7 @@ import { encrypt } from "../../common/utils/security/encrypt";
 import { randomUUID } from "node:crypto"
 import TokenService from "../../common/utils/jwt/jwt.service";
 import { ACCESS_SECRET_KEY_ADMIN, ACCESS_SECRET_KEY_USER, REFRESH_SECRET_KEY_ADMIN, REFRESH_SECRET_KEY_USER } from "../../config/config.service";
+import { successResponse } from "../../common/utils/success.response";
 class UserService {
     private readonly _userModel = new UserRepository()
     private readonly _redisService = redisService
@@ -48,9 +49,8 @@ class UserService {
 
     }
     register = async (req: Request, res: Response, next: NextFunction) => {
-        const { userName, email, password, confirmPassword, role = RoleEnum.user, phone, isConfirmed = false }: IRegisterType = req.body
+        const { userName, email, password, confirmPassword, role = RoleEnum.ADMIN, phone, isConfirmed = false }: IRegisterType = req.body
 
-        // check email 
         const isEmailExist = await this._userModel.findOne({
             filter: { email }
         })
@@ -102,7 +102,6 @@ class UserService {
             data: userUpdated
         });
     }
-    // login
 
     login = async (req: Request, res: Response, next: NextFunction) => {
         const { email, password } = req.body
@@ -218,6 +217,92 @@ class UserService {
         res.status(201).json({
             message: "Password updated successfully"
         });
+    }
+
+    createUser = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) => {
+
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            role,
+            phone
+        } = req.body;
+
+        const exists =
+            await this._userModel.findOne({
+                filter: { email }
+            });
+
+        if (exists) {
+            throw new AppError(
+                "Email already exists",
+                409
+            );
+        }
+
+        const hashedPassword = Hash({ plan_text: password })
+
+        const user =
+            await this._userModel.create({
+                firstName,
+                lastName,
+                email,
+                password: hashedPassword,
+                role,
+                phone,
+                isConfirmed: true
+            });
+
+        successResponse({
+            res,
+            status: 201,
+            message:
+                "User created successfully",
+            data: user
+        });
+    };
+    updateUserRole = async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params
+        const { role } = req.body;
+        const user = await this._userModel.findOne({
+            filter: {
+                _id: id
+            }
+        })
+        if (!user) {
+            throw new AppError("User not Found", 404)
+        }
+        await this._userModel.update(
+            { _id: id },
+            { role }
+        );
+
+        return successResponse({
+            res,
+            status: 200,
+            message:
+                "Role updated successfully"
+        });
+    }
+
+    deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params
+        const user = await this._userModel.findOne({
+            filter: {
+                _id: id
+            }
+        })
+        if (!user) {
+            throw new AppError("User not Found", 404)
+        }
+        await this._userModel.delete(user._id)
+        successResponse({ res, message: "User deleted Success" })
     }
 
     // logOut

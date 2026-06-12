@@ -33,9 +33,10 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePasswordSchema = exports.resetPasswordSchema = exports.forgetPasswordSchema = exports.resendOtpSchema = exports.loginSchema = exports.confirmEmailSchema = exports.registerSchema = void 0;
+exports.updatePasswordSchema = exports.resetPasswordSchema = exports.forgetPasswordSchema = exports.resendOtpSchema = exports.loginSchema = exports.deleteUser = exports.updateRole = exports.confirmEmailSchema = exports.createUser = exports.registerSchema = void 0;
 const z = __importStar(require("zod"));
 const user_enum_1 = require("../../common/enums/user.enum");
+const generalRules_1 = require("../../common/utils/generalRules");
 exports.registerSchema = {
     body: z.object({
         userName: z.string({ error: "userName is required" }).min(3).max(25),
@@ -52,10 +53,34 @@ exports.registerSchema = {
         path: ["confirmPassword"]
     })
 };
+exports.createUser = {
+    body: z.object({
+        firstName: z.string({ error: "userName is required" }).min(3).max(25),
+        lastName: z.string({ error: "userName is required" }).min(3).max(25),
+        password: z.string({ error: "password is required" }).min(6),
+        email: z.string({ error: "email is required" }).email(),
+        phone: z.string().min(10).max(15).optional(),
+        isConfirmed: z.boolean().optional(),
+        role: z.enum(user_enum_1.RoleEnum)
+    })
+};
 exports.confirmEmailSchema = {
     body: z.object({
         otp: z.string(),
         email: z.string().email()
+    })
+};
+exports.updateRole = {
+    params: z.object({
+        id: generalRules_1.generalRules.id
+    }),
+    body: z.object({
+        role: z.enum(user_enum_1.RoleEnum)
+    })
+};
+exports.deleteUser = {
+    params: z.object({
+        id: generalRules_1.generalRules.id
     })
 };
 exports.loginSchema = {

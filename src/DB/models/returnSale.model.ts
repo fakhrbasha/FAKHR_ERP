@@ -14,6 +14,7 @@ export interface ISalesReturn {
     note?: string;
 
     createdBy: Types.ObjectId;
+    createdAt: Date
 }
 
 

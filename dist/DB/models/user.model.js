@@ -31,7 +31,11 @@ const userSchema = new mongoose_1.default.Schema({
         type: String, required: true, trim: true, min: 6, max: 100
     },
     isConfirmed: { type: Boolean },
-    role: { type: String, enum: user_enum_1.RoleEnum, default: user_enum_1.RoleEnum.user },
+    role: {
+        type: String,
+        enum: Object.values(user_enum_1.RoleEnum),
+        default: user_enum_1.RoleEnum.ADMIN
+    }
 }, {
     timestamps: true,
     strict: true,

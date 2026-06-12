@@ -1,5 +1,6 @@
 import * as z from "zod"
 import { RoleEnum } from "../../common/enums/user.enum"
+import { generalRules } from "../../common/utils/generalRules"
 
 export const registerSchema = {
     body: z.object({
@@ -18,10 +19,35 @@ export const registerSchema = {
     })
 }
 
+export const createUser = {
+    body: z.object({
+        firstName: z.string({ error: "userName is required" }).min(3).max(25),
+        lastName: z.string({ error: "userName is required" }).min(3).max(25),
+        password: z.string({ error: "password is required" }).min(6),
+        email: z.string({ error: "email is required" }).email(),
+        phone: z.string().min(10).max(15).optional(),
+        isConfirmed: z.boolean().optional(),
+        role: z.enum(RoleEnum)
+    })
+}
+
 export const confirmEmailSchema = {
     body: z.object({
         otp: z.string(),
         email: z.string().email()
+    })
+}
+export const updateRole = {
+    params: z.object({
+        id: generalRules.id
+    }),
+    body: z.object({
+        role: z.enum(RoleEnum)
+    })
+}
+export const deleteUser = {
+    params: z.object({
+        id: generalRules.id
     })
 }
 

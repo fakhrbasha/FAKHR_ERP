@@ -14,6 +14,7 @@ const encrypt_1 = require("../../common/utils/security/encrypt");
 const node_crypto_1 = require("node:crypto");
 const jwt_service_1 = __importDefault(require("../../common/utils/jwt/jwt.service"));
 const config_service_1 = require("../../config/config.service");
+const success_response_1 = require("../../common/utils/success.response");
 class UserService {
     _userModel = new user_repository_1.default();
     _redisService = redis_service_1.default;
@@ -43,7 +44,7 @@ class UserService {
         await this._redisService.increment({ key: email });
     };
     register = async (req, res, next) => {
-        const { userName, email, password, confirmPassword, role = user_enum_1.RoleEnum.user, phone, isConfirmed = false } = req.body;
+        const { userName, email, password, confirmPassword, role = user_enum_1.RoleEnum.ADMIN, phone, isConfirmed = false } = req.body;
         const isEmailExist = await this._userModel.findOne({
             filter: { email }
         });
@@ -176,6 +177,62 @@ class UserService {
         res.status(201).json({
             message: "Password updated successfully"
         });
+    };
+    createUser = async (req, res, next) => {
+        const { firstName, lastName, email, password, role, phone } = req.body;
+        const exists = await this._userModel.findOne({
+            filter: { email }
+        });
+        if (exists) {
+            throw new global_error_handling_1.AppError("Email already exists", 409);
+        }
+        const hashedPassword = (0, hash_1.Hash)({ plan_text: password });
+        const user = await this._userModel.create({
+            firstName,
+            lastName,
+            email,
+            password: hashedPassword,
+            role,
+            phone,
+            isConfirmed: true
+        });
+        (0, success_response_1.successResponse)({
+            res,
+            status: 201,
+            message: "User created successfully",
+            data: user
+        });
+    };
+    updateUserRole = async (req, res, next) => {
+        const { id } = req.params;
+        const { role } = req.body;
+        const user = await this._userModel.findOne({
+            filter: {
+                _id: id
+            }
+        });
+        if (!user) {
+            throw new global_error_handling_1.AppError("User not Found", 404);
+        }
+        await this._userModel.update({ _id: id }, { role });
+        return (0, success_response_1.successResponse)({
+            res,
+            status: 200,
+            message: "Role updated successfully"
+        });
+    };
+    deleteUser = async (req, res, next) => {
+        const { id } = req.params;
+        const user = await this._userModel.findOne({
+            filter: {
+                _id: id
+            }
+        });
+        if (!user) {
+            throw new global_error_handling_1.AppError("User not Found", 404);
+        }
+        await this._userModel.delete(user._id);
+        (0, success_response_1.successResponse)({ res, message: "User deleted Success" });
     };
     logOut = async (req, res, next) => {
         const token = req.headers.authorization?.split(" ")[1];

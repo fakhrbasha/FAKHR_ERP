@@ -1,0 +1,55 @@
+tags:
+  - name: Accounting
+    description: Accounting & financial endpoints
+
+paths:
+  /accounting/summary:
+    get:
+      tags: [Accounting]
+      summary: Get accounting summary
+      description: Retrieve a summary of total sales, total expenses, total purchases, total return sales, net income, etc.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Accounting summary retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden (Admin only)
+
+  /accounting/monthly-report:
+    get:
+      tags: [Accounting]
+      summary: Get monthly accounting report
+      description: Retrieve an accounting report grouped by month and year.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: year
+          schema:
+            type: integer
+            example: 2026
+          description: The year to get the report for. Defaults to the current year.
+        - in: query
+          name: month
+          schema:
+            type: integer
+            example: 6
+          description: The month to get the report for.
+      responses:
+        '200':
+          description: Monthly accounting report retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden (Admin only)

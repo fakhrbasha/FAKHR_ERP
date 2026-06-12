@@ -14,6 +14,7 @@ export interface ISale {
     note?: string;
 
     createdBy: Types.ObjectId;
+    createdAt: Date
 }
 
 const salesSchema = new mongoose.Schema<ISale>({
