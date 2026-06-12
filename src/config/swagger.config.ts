@@ -4,7 +4,7 @@ import path from "path";
 const swaggerDefinition = {
   openapi: "3.0.0",
   info: {
-    title: "🌋 Volcano API",
+    title: "FAKHR API",
     version: "1.0.0",
     description:
       "Complete REST API documentation for the Volcano warehouse & employee management system.",
@@ -14,10 +14,10 @@ const swaggerDefinition = {
     },
   },
   servers: [
-    {
-      url: "https://volcano-pi.vercel.app",
-      description: "Production Server",
-    }
+    // {
+    //   url: "https://volcano-pi.vercel.app",
+    //   description: "Production Server",
+    // }
   ],
   tags: [
     { name: "Auth", description: "Authentication & user management endpoints" },
