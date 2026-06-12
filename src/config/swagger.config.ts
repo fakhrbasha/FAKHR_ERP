@@ -7,7 +7,7 @@ const swaggerDefinition = {
     title: "FAKHR API",
     version: "1.0.0",
     description:
-      "Complete REST API documentation for the Volcano warehouse & employee management system.",
+      "Complete REST API documentation for the FAKHR warehouse & employee management system.",
     contact: {
       name: "Fakhr Basha",
       email: "ahmedmhmdsala@gmail.com",
