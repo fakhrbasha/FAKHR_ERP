@@ -8,19 +8,34 @@ const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const swaggerDefinition = {
     openapi: "3.0.0",
     info: {
-        title: "🌋 Volcano API",
+        title: "FAKHR API",
         version: "1.0.0",
-        description: "Complete REST API documentation for the Volcano warehouse & employee management system.",
+        description: "Complete REST API documentation for the FAKHR warehouse & employee management system.",
         contact: {
             name: "Fakhr Basha",
             email: "ahmedmhmdsala@gmail.com",
         },
     },
-    servers: [
-        {
-            url: "https://volcano-pi.vercel.app",
-            description: "Production Server",
-        }
+    servers: [],
+    tags: [
+        { name: "Auth", description: "Authentication & user management endpoints" },
+        { name: "Dashboard", description: "Dashboard summary endpoints" },
+        { name: "Accounting", description: "Accounting & financial endpoints" },
+        { name: "Reports", description: "System reports endpoints" },
+        { name: "Sales", description: "Sales management endpoints" },
+        { name: "Return Sales", description: "Return sales management endpoints" },
+        { name: "Product", description: "Product management endpoints" },
+        { name: "Customer", description: "Customer management endpoints" },
+        { name: "Employee", description: "Employee management endpoints" },
+        { name: "Attendance", description: "Attendance management endpoints" },
+        { name: "Department", description: "Department management endpoints" },
+        { name: "Material", description: "Material management endpoints" },
+        { name: "Color", description: "Color management endpoints" },
+        { name: "Yarn Stock", description: "Yarn stock management endpoints" },
+        { name: "Supplier", description: "Supplier management endpoints" },
+        { name: "Purchase Order", description: "Purchase order management endpoints" },
+        { name: "Expenses", description: "Expenses management endpoints" },
+        { name: "Notification", description: "Notification management endpoints" }
     ],
     components: {
         securitySchemes: {
@@ -82,6 +97,26 @@ const swaggerDefinition = {
                 properties: {
                     oldPassword: { type: "string", example: "oldSecret123" },
                     newPassword: { type: "string", example: "newSecret456" },
+                },
+            },
+            CreateUserBody: {
+                type: "object",
+                required: ["firstName", "lastName", "email", "password", "role"],
+                properties: {
+                    firstName: { type: "string", minLength: 3, maxLength: 25, example: "John" },
+                    lastName: { type: "string", minLength: 3, maxLength: 25, example: "Doe" },
+                    email: { type: "string", format: "email", example: "john@example.com" },
+                    password: { type: "string", minLength: 6, example: "secret123" },
+                    phone: { type: "string", example: "01012345678" },
+                    role: { type: "string", enum: ["admin", "user", "employee", "supervisor", "manager"], example: "admin" },
+                    isConfirmed: { type: "boolean", example: true },
+                },
+            },
+            UpdateRoleBody: {
+                type: "object",
+                required: ["role"],
+                properties: {
+                    role: { type: "string", enum: ["admin", "user", "employee", "supervisor", "manager"], example: "admin" },
                 },
             },
             DepartmentBody: {

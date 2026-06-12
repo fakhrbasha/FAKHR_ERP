@@ -10,6 +10,7 @@ const nodeMailer_1 = require("./nodeMailer");
 const config_service_1 = require("../../../config/config.service");
 const notifications_model_1 = require("../../../DB/models/notifications.model");
 const notification_repository_1 = __importDefault(require("../../../DB/repository/notification.repository"));
+const lowStock__templete_1 = require("./lowStock..templete");
 var NotificationEventEnum;
 (function (NotificationEventEnum) {
     NotificationEventEnum["LOW_STOCK"] = "LOW_STOCK_NOTIFICATION";
@@ -27,14 +28,12 @@ exports.eventEmitter.on(user_enum_1.EmailEnum.lowStock, async ({ stock, material
     await (0, nodeMailer_1.sendEmail)({
         to: config_service_1.WAREHOUSE_EMAIL,
         subject: "Low Stock Alert",
-        html: `
-                <h2>Low Stock Alert</h2>
-                <p>Material: ${material.name}</p>
-                <p>Color: ${color.name}</p>
-                <p>Current Quantity: ${newQuantity}</p>
-                <p>Minimum Quantity: ${stock.minQuantity}</p>
-                <p>Please restock this item as soon as possible.</p>
-            `,
+        html: (0, lowStock__templete_1.templateLowStock)({
+            materialName: material.name,
+            colorName: color.name,
+            currentQuantity: newQuantity,
+            minQuantity: stock.minQuantity,
+        })
     });
 });
 exports.eventEmitter.on(NotificationEventEnum.LOW_STOCK, async ({ material, color, newQuantity, }) => {
