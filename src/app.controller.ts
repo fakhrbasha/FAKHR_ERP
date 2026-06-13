@@ -24,8 +24,10 @@ import notificationRouter from "./modules/notification/notification.controller";
 import salesRouter from "./modules/sales/sales.controller";
 import returnSalesRouter from "./modules/return sales/returnSales.controller";
 import accountingRouter from "./modules/accounting/accounting.controller";
+import cors from "cors";
 const app: express.Application = express();
 const port = PORT || 3000
+app.use(cors());
 app.use(express.json());
 
 // ─── Swagger UI ──────────────────────────────────────────────────────────────

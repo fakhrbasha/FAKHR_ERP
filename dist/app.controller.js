@@ -29,8 +29,10 @@ const notification_controller_1 = __importDefault(require("./modules/notificatio
 const sales_controller_1 = __importDefault(require("./modules/sales/sales.controller"));
 const returnSales_controller_1 = __importDefault(require("./modules/return sales/returnSales.controller"));
 const accounting_controller_1 = __importDefault(require("./modules/accounting/accounting.controller"));
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 const port = config_service_1.PORT || 3000;
+app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.swaggerSpec, {
     customSiteTitle: '🌋 Volcano API Docs',
