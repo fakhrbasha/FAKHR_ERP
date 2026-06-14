@@ -315,6 +315,13 @@ class UserService {
         successResponse({ res, message: "User deleted Success" })
     }
 
+    getUsers = async (req: Request, res: Response, next: NextFunction) => {
+        const page = Number(req.query.page)
+        const limit = Number(req.query.limit)
+        const users = await this._userModel.paginate({ page, limit })
+
+        successResponse({ res, message: "users fetched success", data: users })
+    }
     // logOut
 
     logOut = async (req: Request, res: Response, next: NextFunction) => {

@@ -9,6 +9,7 @@ const authRouter = Router()
 
 authRouter.post("/register", validation(userValidation.registerSchema), UserService.register)
 authRouter.post("/users", authentication, authorization(RoleEnum.ADMIN), validation(userValidation.createUser), UserService.createUser)
+authRouter.get("/users", authentication, authorization(RoleEnum.ADMIN), UserService.getUsers)
 authRouter.get("/profile", authentication, UserService.getProfile)
 authRouter.delete("/users/:id", authentication, authorization(RoleEnum.ADMIN), validation(userValidation.deleteUser), UserService.deleteUser)
 authRouter.post("/users/:id/role", authentication, authorization(RoleEnum.ADMIN), validation(userValidation.updateRole), UserService.updateUserRole)
