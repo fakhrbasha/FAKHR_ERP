@@ -242,6 +242,12 @@ class UserService {
         await this._userModel.delete(user._id);
         (0, success_response_1.successResponse)({ res, message: "User deleted Success" });
     };
+    getUsers = async (req, res, next) => {
+        const page = Number(req.query.page);
+        const limit = Number(req.query.limit);
+        const users = await this._userModel.paginate({ page, limit });
+        (0, success_response_1.successResponse)({ res, message: "users fetched success", data: users });
+    };
     logOut = async (req, res, next) => {
         const token = req.headers.authorization?.split(" ")[1];
         if (token) {

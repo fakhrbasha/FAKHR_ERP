@@ -46,6 +46,7 @@ const user_enum_1 = require("../../common/enums/user.enum");
 const authRouter = (0, express_1.Router)();
 authRouter.post("/register", (0, validation_1.validation)(userValidation.registerSchema), auth_service_1.default.register);
 authRouter.post("/users", authentication_1.authentication, (0, authorization_1.authorization)(user_enum_1.RoleEnum.ADMIN), (0, validation_1.validation)(userValidation.createUser), auth_service_1.default.createUser);
+authRouter.get("/users", authentication_1.authentication, (0, authorization_1.authorization)(user_enum_1.RoleEnum.ADMIN), auth_service_1.default.getUsers);
 authRouter.get("/profile", authentication_1.authentication, auth_service_1.default.getProfile);
 authRouter.delete("/users/:id", authentication_1.authentication, (0, authorization_1.authorization)(user_enum_1.RoleEnum.ADMIN), (0, validation_1.validation)(userValidation.deleteUser), auth_service_1.default.deleteUser);
 authRouter.post("/users/:id/role", authentication_1.authentication, (0, authorization_1.authorization)(user_enum_1.RoleEnum.ADMIN), (0, validation_1.validation)(userValidation.updateRole), auth_service_1.default.updateUserRole);

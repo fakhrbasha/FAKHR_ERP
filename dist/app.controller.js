@@ -69,10 +69,10 @@ app.use('/accounting', accounting_controller_1.default);
 app.get('/', (req, res) => {
     res.status(200).json({ message: "Welcome Fakhr In Your Home" });
 });
-app.use(global_error_handling_1.globalErrorHandler);
 app.use("{/*demo}", (req, res, next) => {
     throw new global_error_handling_1.AppError(`Invalid URL ${req.originalUrl} with method ${req.method} not found`, 404);
 });
+app.use(global_error_handling_1.globalErrorHandler);
 const bootstrap = () => {
     app.listen(port, () => {
         console.log(`✅ Server is running on port ${port}`);
