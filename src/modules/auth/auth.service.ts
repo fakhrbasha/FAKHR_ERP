@@ -132,6 +132,14 @@ class UserService {
 
     }
 
+    getProfile = async (req: Request, res: Response, next: NextFunction) => {
+        // const   = req.params
+
+        const user = await this._userModel.findOne({
+            filter: { _id: req.user._id }
+        })
+        successResponse({ res, message: "profile fetched success", data: user })
+    }
     // resend otp
 
     resendOtp = async (req: Request, res: Response, next: NextFunction) => {
