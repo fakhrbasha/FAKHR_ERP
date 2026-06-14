@@ -118,6 +118,14 @@ class UserService {
             data: { access_token, refresh_token }
         });
     };
+    getProfile = async (req, res, next) => {
+        const user = await this._userModel.findById(req.user._id);
+        (0, success_response_1.successResponse)({
+            res,
+            message: "profile fetched success",
+            data: user
+        });
+    };
     resendOtp = async (req, res, next) => {
         const { email } = req.body;
         const userExist = await this._userModel.findOne({ filter: { email } });
