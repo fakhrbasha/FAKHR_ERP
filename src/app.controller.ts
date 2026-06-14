@@ -70,10 +70,10 @@ app.use('/accounting', accountingRouter)
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({ message: "Welcome Fakhr In Your Home" })
 })
-app.use(globalErrorHandler);
 app.use("{/*demo}", (req: Request, res: Response, next: NextFunction) => {
     throw new AppError(`Invalid URL ${req.originalUrl} with method ${req.method} not found`, 404)
 })
+app.use(globalErrorHandler);
 
 export const bootstrap = () => {
     app.listen(port, () => {
