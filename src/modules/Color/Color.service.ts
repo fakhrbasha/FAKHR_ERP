@@ -79,6 +79,20 @@ class ColorService {
         });
     }
 
+    getColorById = async (req: Request, res: Response, next: NextFunction) => {
+        const { id } = req.params
+
+        const color = await this._colorModel.findOne({
+            filter: {
+                _id: id
+            }
+        })
+        if (!color) {
+            throw new AppError("Color Not Found", 404)
+        }
+
+        successResponse({ res, message: "color fetched success", data: color })
+    }
     // edit color
 
     editColor = async (req: Request, res: Response, next: NextFunction) => {

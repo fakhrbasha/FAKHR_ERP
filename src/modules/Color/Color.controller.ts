@@ -8,6 +8,7 @@ const colorRouter = Router()
 
 colorRouter.post('/', authentication, validation(colorValidation.addColorSchema), ColorService.addColor)
 colorRouter.get('/', authentication, ColorService.getColors)
+colorRouter.get('/:id', authentication, ColorService.getColorById)
 colorRouter.put('/:id', authentication, validation(colorValidation.updateColorSchema), ColorService.editColor)
 colorRouter.delete('/:id', authentication, ColorService.deleteColor)
 
