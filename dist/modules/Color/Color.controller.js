@@ -44,6 +44,7 @@ const Color_service_1 = __importDefault(require("./Color.service"));
 const colorRouter = (0, express_1.Router)();
 colorRouter.post('/', authentication_1.authentication, (0, validation_1.validation)(colorValidation.addColorSchema), Color_service_1.default.addColor);
 colorRouter.get('/', authentication_1.authentication, Color_service_1.default.getColors);
+colorRouter.get('/:id', authentication_1.authentication, Color_service_1.default.getColorById);
 colorRouter.put('/:id', authentication_1.authentication, (0, validation_1.validation)(colorValidation.updateColorSchema), Color_service_1.default.editColor);
 colorRouter.delete('/:id', authentication_1.authentication, Color_service_1.default.deleteColor);
 exports.default = colorRouter;

@@ -10,9 +10,11 @@ const success_response_1 = require("../../common/utils/success.response");
 const stock_repository_1 = __importDefault(require("../../DB/repository/stock.repository"));
 const material_repository_1 = __importDefault(require("../../DB/repository/material.repository"));
 const email_event_1 = require("../../common/utils/email/email.event");
-const user_enum_1 = require("../../common/enums/user.enum");
+const nodeMailer_1 = require("../../common/utils/email/nodeMailer");
+const config_service_1 = require("../../config/config.service");
 const stockTransaction_repository_1 = __importDefault(require("../../DB/repository/stockTransaction.repository"));
 const stockTransaction_model_1 = require("../../DB/models/stockTransaction.model");
+const lowStock__templete_1 = require("../../common/utils/email/lowStock..templete");
 class StockTransactionService {
     _stockModel = new stock_repository_1.default();
     _stockTransactionModel = new stockTransaction_repository_1.default();
@@ -92,11 +94,15 @@ class StockTransactionService {
             createdBy: req.user?._id
         });
         if (newQuantity <= stock.minQuantity) {
-            email_event_1.eventEmitter.emit(user_enum_1.EmailEnum.lowStock, {
-                stock,
-                newQuantity,
-                material,
-                color
+            await (0, nodeMailer_1.sendEmail)({
+                to: config_service_1.WAREHOUSE_EMAIL,
+                subject: "Low Stock Alert",
+                html: (0, lowStock__templete_1.templateLowStock)({
+                    materialName: material?.name,
+                    colorName: color?.name,
+                    currentQuantity: newQuantity,
+                    minQuantity: stock.minQuantity,
+                })
             });
             email_event_1.eventEmitter.emit(email_event_1.NotificationEventEnum.LOW_STOCK, {
                 material,

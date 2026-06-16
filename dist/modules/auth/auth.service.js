@@ -40,7 +40,7 @@ class UserService {
         const otp = await (0, nodeMailer_1.sendOtp)();
         await (0, nodeMailer_1.sendEmail)({
             to: email,
-            subject: "Volcano App",
+            subject: "FAKHR-ERP App",
             html: (0, email_tamplete_1.templateEmail)(otp)
         });
         await this._redisService.setValue({ key: this._redisService.otpKey({ email }), value: (0, hash_1.Hash)({ plan_text: `${otp}` }), ttl: 60 * 10 });
