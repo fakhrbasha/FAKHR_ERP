@@ -148,6 +148,7 @@ const swaggerDefinition = {
           salary: { type: "number", example: 6000 },
           phone: { type: "string", example: "01098765432" },
           role: { type: "string", example: "manager" },
+          departmentId: { type: "string", example: "664f1c2e3a1b2c3d4e5f6a7b" },
         },
       },
       // ─── Material ────────────────────────────────────────────

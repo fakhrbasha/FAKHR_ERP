@@ -3,7 +3,7 @@ tags:
     description: Manage employees
 
 paths:
-  /employee/{departmentId}:
+  /employee/create-employee/{departmentId}:
     post:
       tags: [Employee]
       summary: Create an employee in a department
@@ -41,6 +41,30 @@ paths:
       summary: Get all employees
       security:
         - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+            example: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+            example: 10
+        - name: search
+          in: query
+          required: false
+          description: Case-insensitive employee search term
+          schema:
+            type: string
+            example: "Ahmed"
       responses:
         '200':
           description: List of all employees
