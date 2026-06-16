@@ -14,7 +14,8 @@ export interface ISalesReturn {
     note?: string;
 
     createdBy: Types.ObjectId;
-    createdAt: Date
+    createdAt: Date;
+    companyId: Types.ObjectId;
 }
 
 
@@ -47,6 +48,11 @@ const returnSalesSchema = new mongoose.Schema<ISalesReturn>({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        required: true
+    },
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
         required: true
     }
 

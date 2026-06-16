@@ -13,6 +13,7 @@ export interface IStockTransaction {
     type: TransactionStock_Enum;
     createdBy: Types.ObjectId;
     reason?: string;
+    companyId: Types.ObjectId;
 }
 
 
@@ -21,7 +22,8 @@ const stockTransactionSchema = new mongoose.Schema<IStockTransaction>({
     quantity: { type: Number, required: true },
     type: { type: String, enum: Object.values(TransactionStock_Enum), required: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
-    reason: { type: String }
+    reason: { type: String },
+    companyId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Company' }
 }, {
     timestamps: true,
     strict: true,

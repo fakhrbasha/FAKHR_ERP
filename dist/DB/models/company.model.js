@@ -4,14 +4,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const deptSchema = new mongoose_1.default.Schema({
+const companySchema = new mongoose_1.default.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
-    companyId: {
+    adminId: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "Company",
+        ref: "User",
         required: true
     }
 }, {
@@ -21,6 +22,5 @@ const deptSchema = new mongoose_1.default.Schema({
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
-deptSchema.index({ name: 1, companyId: 1 }, { unique: true });
-const departmentModel = mongoose_1.default.models.Department || mongoose_1.default.model("Department", deptSchema);
-exports.default = departmentModel;
+const companyModel = mongoose_1.default.models.Company || mongoose_1.default.model("Company", companySchema);
+exports.default = companyModel;

@@ -13,8 +13,7 @@ const customerSchema = new mongoose_1.default.Schema({
     phone: {
         type: String,
         required: true,
-        trim: true,
-        unique: true
+        trim: true
     },
     address: {
         type: String,
@@ -24,6 +23,11 @@ const customerSchema = new mongoose_1.default.Schema({
     note: {
         type: String,
     },
+    companyId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
+    }
 }, {
     timestamps: true,
     strict: true,
@@ -31,5 +35,6 @@ const customerSchema = new mongoose_1.default.Schema({
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
+customerSchema.index({ phone: 1, companyId: 1 }, { unique: true });
 const customerModel = mongoose_1.default.models.Customer || mongoose_1.default.model("Customer", customerSchema);
 exports.default = customerModel;

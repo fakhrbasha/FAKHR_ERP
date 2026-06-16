@@ -13,7 +13,7 @@ export const sendEmail = async (mailOptions: Mail.Options) => {
         },
     });
     const info = await transporter.sendMail({
-        from: `"VOLCANO "<${GMAIL_USER}>`,
+        from: `"FAKHR-ERP "<${GMAIL_USER}>`,
         ...mailOptions
     });
 

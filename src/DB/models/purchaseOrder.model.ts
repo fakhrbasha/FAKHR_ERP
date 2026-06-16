@@ -25,6 +25,7 @@ export interface IPurchaseOrder {
     notes?: string;
 
     createdBy: Types.ObjectId;
+    companyId: Types.ObjectId;
 }
 
 const purchaseOrderSchema = new mongoose.Schema<IPurchaseOrder>({
@@ -74,6 +75,11 @@ const purchaseOrderSchema = new mongoose.Schema<IPurchaseOrder>({
     createdBy: {
         type: Schema.Types.ObjectId,
         ref: "User"
+    },
+    companyId: {
+        type: Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 }, {
     timestamps: true

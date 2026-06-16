@@ -5,8 +5,8 @@ export interface ICustomer {
     name: string,
     phone: string,
     address: string,
-    note?: string
-
+    note?: string,
+    companyId: Types.ObjectId
 }
 
 const customerSchema = new mongoose.Schema<ICustomer>({
@@ -18,8 +18,7 @@ const customerSchema = new mongoose.Schema<ICustomer>({
     phone: {
         type: String,
         required: true,
-        trim: true,
-        unique: true
+        trim: true
     },
     address: {
         type: String,
@@ -29,7 +28,11 @@ const customerSchema = new mongoose.Schema<ICustomer>({
     note: {
         type: String,
     },
-
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
+    }
 
 }, {
     timestamps: true,
@@ -39,6 +42,8 @@ const customerSchema = new mongoose.Schema<ICustomer>({
     toObject: { virtuals: true }
 
 })
+
+customerSchema.index({ phone: 1, companyId: 1 }, { unique: true });
 
 const customerModel = mongoose.models.Customer || mongoose.model<ICustomer>("Customer", customerSchema)
 

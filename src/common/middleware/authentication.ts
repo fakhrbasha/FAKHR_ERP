@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { authFunction } from "../utils/authFunction"
+import { tenantStorage } from "../services/tenant.storage"
 
 export const authentication = async (req: Request, res: Response, next: NextFunction) => {
     const { authorization } = req.headers
@@ -9,5 +10,11 @@ export const authentication = async (req: Request, res: Response, next: NextFunc
     req.user = user
     req.decoded = decoded
 
-    next()
+    if (user && user.companyId) {
+        tenantStorage.run(user.companyId.toString(), () => {
+            next()
+        })
+    } else {
+        next()
+    }
 }

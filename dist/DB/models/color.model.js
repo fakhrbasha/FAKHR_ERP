@@ -9,7 +9,12 @@ const colorSchema = new mongoose_1.default.Schema({
         type: String,
         required: true
     },
-    hexCode: String
+    hexCode: String,
+    companyId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
+    }
 });
 const colorModel = mongoose_1.default.models.Color || mongoose_1.default.model("Color", colorSchema);
 exports.default = colorModel;

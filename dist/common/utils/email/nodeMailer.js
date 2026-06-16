@@ -15,7 +15,7 @@ const sendEmail = async (mailOptions) => {
         },
     });
     const info = await transporter.sendMail({
-        from: `"VOLCANO "<${config_service_1.GMAIL_USER}>`,
+        from: `"FAKHR-ERP "<${config_service_1.GMAIL_USER}>`,
         ...mailOptions
     });
     return info.accepted.length ? true : false;

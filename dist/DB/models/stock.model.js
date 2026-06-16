@@ -10,6 +10,7 @@ const stockSchema = new mongoose_1.default.Schema({
     quantity: { type: Number, required: true },
     minQuantity: { type: Number, required: true },
     createdBy: { type: mongoose_1.default.Schema.Types.ObjectId, required: true },
+    companyId: { type: mongoose_1.default.Schema.Types.ObjectId, required: true, ref: 'Company' }
 }, {
     timestamps: true,
     strict: true,

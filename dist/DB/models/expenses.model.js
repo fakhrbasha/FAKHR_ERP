@@ -28,6 +28,11 @@ const expensesSchema = new mongoose_1.default.Schema({
         type: mongoose_1.default.Schema.Types.ObjectId,
         required: true,
         ref: "User"
+    },
+    companyId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 }, {
     timestamps: true,

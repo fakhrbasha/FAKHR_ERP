@@ -22,7 +22,6 @@ const productSchema = new mongoose_1.default.Schema({
     sku: {
         type: String,
         required: true,
-        unique: true,
         trim: true
     },
     description: String,
@@ -52,7 +51,12 @@ const productSchema = new mongoose_1.default.Schema({
         type: Boolean,
         default: true
     },
-    imagePublicId: String
+    imagePublicId: String,
+    companyId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
+    }
 }, {
     timestamps: true,
     strict: true,
@@ -60,5 +64,6 @@ const productSchema = new mongoose_1.default.Schema({
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
+productSchema.index({ sku: 1, companyId: 1 }, { unique: true });
 const productModel = mongoose_1.default.models.Product || mongoose_1.default.model("Product", productSchema);
 exports.default = productModel;

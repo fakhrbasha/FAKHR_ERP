@@ -7,7 +7,7 @@ import { sendEmail, sendOtp } from "../../common/utils/email/nodeMailer";
 import { eventEmitter } from "../../common/utils/email/email.event";
 import { templateEmail } from "../../common/utils/email/email.tamplete";
 import { Compare, Hash } from "../../common/utils/security/hash";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 import { IUser } from "../../DB/models/user.model";
 import { IRegisterType } from "./auth.dto";
 import { encrypt } from "../../common/utils/security/encrypt";
@@ -15,8 +15,10 @@ import { randomUUID } from "node:crypto"
 import TokenService from "../../common/utils/jwt/jwt.service";
 import { ACCESS_SECRET_KEY_ADMIN, ACCESS_SECRET_KEY_USER, REFRESH_SECRET_KEY_ADMIN, REFRESH_SECRET_KEY_USER } from "../../config/config.service";
 import { successResponse } from "../../common/utils/success.response";
+import CompanyRepository from "../../DB/repository/company.repository";
 class UserService {
     private readonly _userModel = new UserRepository()
+    private readonly _companyModel = new CompanyRepository()
     private readonly _redisService = redisService
     private readonly _tokenService = TokenService
     constructor() { }
@@ -58,6 +60,15 @@ class UserService {
             throw new AppError("This email already Exist", 400)
         }
 
+        // ─── 1. Generate a stable adminId so company & user can reference each other ───
+        const adminId = new Types.ObjectId()
+
+        // ─── 2. Create the company for this admin ────────────────────────────────────
+        const company = await this._companyModel.create({
+            name: `${userName}'s Company`,
+            adminId
+        })
+
         const otp = await sendOtp()
         await sendEmail({
             to: email,
@@ -66,13 +77,17 @@ class UserService {
         })
         await this._redisService.setValue({ key: this._redisService.otpKey({ email, subject: EmailEnum.confirmedEmail }), value: Hash({ plan_text: `${otp}` }), ttl: 60 * 5 })
         await this._redisService.setValue({ key: this._redisService.max_otp_key({ email }), value: "1", ttl: 60 * 30 })
+
+        // ─── 3. Create the user tied to the company ───────────────────────────────────
         const user: HydratedDocument<IUser> = await this._userModel.create({
+            _id: adminId,
             userName,
             email,
             password: Hash({ plan_text: password }),
             role,
             phone: phone ? encrypt(phone) : undefined,
-            isConfirmed
+            isConfirmed,
+            companyId: company._id
         })
         res.status(201).json({
             message: "User signed up successfully", data: user
@@ -266,7 +281,8 @@ class UserService {
                 password: hashedPassword,
                 role,
                 phone,
-                isConfirmed: true
+                isConfirmed: true,
+                companyId: req.user.companyId  // inherit from the logged-in Admin
             });
 
         successResponse({

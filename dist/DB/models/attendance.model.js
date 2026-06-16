@@ -30,6 +30,11 @@ const attendanceSchema = new mongoose_1.default.Schema({
     overTimeHours: {
         type: Number,
         default: 0
+    },
+    companyId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 }, {
     timestamps: true,

@@ -10,13 +10,16 @@ const global_error_handling_1 = require("../../common/utils/global-error-handlin
 const nodeMailer_1 = require("../../common/utils/email/nodeMailer");
 const email_tamplete_1 = require("../../common/utils/email/email.tamplete");
 const hash_1 = require("../../common/utils/security/hash");
+const mongoose_1 = require("mongoose");
 const encrypt_1 = require("../../common/utils/security/encrypt");
 const node_crypto_1 = require("node:crypto");
 const jwt_service_1 = __importDefault(require("../../common/utils/jwt/jwt.service"));
 const config_service_1 = require("../../config/config.service");
 const success_response_1 = require("../../common/utils/success.response");
+const company_repository_1 = __importDefault(require("../../DB/repository/company.repository"));
 class UserService {
     _userModel = new user_repository_1.default();
+    _companyModel = new company_repository_1.default();
     _redisService = redis_service_1.default;
     _tokenService = jwt_service_1.default;
     constructor() { }
@@ -51,6 +54,11 @@ class UserService {
         if (isEmailExist) {
             throw new global_error_handling_1.AppError("This email already Exist", 400);
         }
+        const adminId = new mongoose_1.Types.ObjectId();
+        const company = await this._companyModel.create({
+            name: `${userName}'s Company`,
+            adminId
+        });
         const otp = await (0, nodeMailer_1.sendOtp)();
         await (0, nodeMailer_1.sendEmail)({
             to: email,
@@ -60,12 +68,14 @@ class UserService {
         await this._redisService.setValue({ key: this._redisService.otpKey({ email, subject: user_enum_1.EmailEnum.confirmedEmail }), value: (0, hash_1.Hash)({ plan_text: `${otp}` }), ttl: 60 * 5 });
         await this._redisService.setValue({ key: this._redisService.max_otp_key({ email }), value: "1", ttl: 60 * 30 });
         const user = await this._userModel.create({
+            _id: adminId,
             userName,
             email,
             password: (0, hash_1.Hash)({ plan_text: password }),
             role,
             phone: phone ? (0, encrypt_1.encrypt)(phone) : undefined,
-            isConfirmed
+            isConfirmed,
+            companyId: company._id
         });
         res.status(201).json({
             message: "User signed up successfully", data: user
@@ -202,7 +212,8 @@ class UserService {
             password: hashedPassword,
             role,
             phone,
-            isConfirmed: true
+            isConfirmed: true,
+            companyId: req.user.companyId
         });
         (0, success_response_1.successResponse)({
             res,

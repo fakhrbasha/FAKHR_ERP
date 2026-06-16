@@ -7,6 +7,7 @@ export interface IEmployee {
     phone?: string;
     departmentId?: Types.ObjectId,
     role: string;
+    companyId: Types.ObjectId;
 }
 
 const employeeSchema = new mongoose.Schema<IEmployee>({
@@ -22,8 +23,7 @@ const employeeSchema = new mongoose.Schema<IEmployee>({
     },
     phone: {
         type: String,
-        trim: true,
-        unique: true
+        trim: true
     },
     departmentId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -32,6 +32,11 @@ const employeeSchema = new mongoose.Schema<IEmployee>({
     },
     role: {
         type: String,
+        required: true
+    },
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
         required: true
     }
 
@@ -42,6 +47,8 @@ const employeeSchema = new mongoose.Schema<IEmployee>({
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 })
+
+employeeSchema.index({ phone: 1, companyId: 1 }, { unique: true, sparse: true });
 
 const employeeModel = mongoose.models.Employees || mongoose.model<IEmployee>("Employee", employeeSchema)
 

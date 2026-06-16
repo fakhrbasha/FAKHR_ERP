@@ -1,21 +1,36 @@
-import { HydratedDocument, Model, PopulateOption, PopulateOptions, ProjectionType, QueryFilter, QueryOptions, Types } from "mongoose";
-
-
-
+import { HydratedDocument, Model, PopulateOptions, ProjectionType, QueryFilter, QueryOptions, Types } from "mongoose";
+import { tenantStorage } from "../../common/services/tenant.storage";
 
 abstract class BaseRepository<TDocument> {
     constructor(protected readonly model: Model<TDocument>) { }
 
+    private getTenantFilter(filter: any = {}): any {
+        const companyId = tenantStorage.getCompanyId();
+        if (!companyId || this.model.modelName === "Company") {
+            return filter;
+        }
+        return { ...filter, companyId };
+    }
+
     // create
     async create(data: Partial<TDocument>): Promise<HydratedDocument<TDocument>> {
-        return this.model.create(data)
+        const companyId = tenantStorage.getCompanyId();
+        if (companyId && this.model.modelName !== "Company") {
+            (data as any).companyId = new Types.ObjectId(companyId);
+        }
+        return this.model.create(data);
     }
+
     // findById
     async findById(id: Types.ObjectId): Promise<HydratedDocument<TDocument> | null> {
-        return this.model.findById(id)
+        const companyId = tenantStorage.getCompanyId();
+        if (companyId && this.model.modelName !== "Company") {
+            return this.model.findOne({ _id: id, companyId } as any);
+        }
+        return this.model.findById(id);
     }
-    // findOne -> filter,projection,options
 
+    // findOne -> filter,projection,options
     async findOne({
         filter,
         projection,
@@ -25,7 +40,8 @@ abstract class BaseRepository<TDocument> {
         projection?: ProjectionType<TDocument>,
         options?: QueryOptions<TDocument>
     }): Promise<HydratedDocument<TDocument> | null> {
-        return this.model.findOne(filter, projection, options)
+        const tenantFilter = this.getTenantFilter(filter);
+        return this.model.findOne(tenantFilter, projection, options);
     }
 
     // find
@@ -38,47 +54,45 @@ abstract class BaseRepository<TDocument> {
         projection?: ProjectionType<TDocument>
         options?: QueryOptions<TDocument>
     }): Promise<HydratedDocument<TDocument>[] | []> {
-        return this.model.find(filter, projection)
+        const tenantFilter = this.getTenantFilter(filter);
+        return this.model.find(tenantFilter, projection)
             .sort(options?.sort)
             .skip(options?.skip!)
             .limit(options?.limit!)
-            .populate(options?.populate as PopulateOptions)
+            .populate(options?.populate as PopulateOptions);
     }
 
-    // findOneAndUpdate
-    // findOneAndDelete
     // update
-    //    async update(
-    //         filter: any,
-    //         data: Partial<TDocument>
-    //     ): Promise<HydratedDocument<TDocument> | null> {
-    //         return this.model.findOneAndUpdate(
-    //             filter,
-    //             data,
-    //             { new: true }
-    //         );
-    //     }
     async update(
         filter: any,
         data: Partial<TDocument>
     ): Promise<HydratedDocument<TDocument> | null> {
+        const tenantFilter = this.getTenantFilter(filter);
         return await this.model.findOneAndUpdate(
-            filter,
+            tenantFilter,
             data,
             { new: true }
         ).exec();
     }
 
+    // delete
     async delete(id: Types.ObjectId): Promise<HydratedDocument<TDocument> | null> {
+        const companyId = tenantStorage.getCompanyId();
+        if (companyId && this.model.modelName !== "Company") {
+            return this.model.findOneAndDelete({ _id: id, companyId } as any);
+        }
         return this.model.findByIdAndDelete(id);
     }
 
+    // count
     async count(
         filter: QueryFilter<TDocument> = {}
     ): Promise<number> {
-        return this.model.countDocuments(filter);
+        const tenantFilter = this.getTenantFilter(filter);
+        return this.model.countDocuments(tenantFilter);
     }
 
+    // paginate
     async paginate<T>({
         page,
         limit,
@@ -92,22 +106,23 @@ abstract class BaseRepository<TDocument> {
         populate?: any,
         search?: QueryFilter<T>
     }) {
+        page = +page! || 1;
+        limit = +limit! || 2;
+        if (page < 0) page = 1;
+        if (limit < 0) limit = 2;
+        const skip = (page - 1) * limit;
 
-        page = +page! || 1
-        limit = +limit! || 2
-        if (page < 0) page = 1
-        if (limit < 0) limit = 2
-        const skip = (page - 1) * limit
+        const tenantFilter = this.getTenantFilter(search);
 
         const [data, totalDoc] = await Promise.all([
-            this.model.find({ ...(search ?? {}) })
+            this.model.find({ ...(tenantFilter ?? {}) })
                 .skip(skip)
                 .limit(limit)
                 .populate(populate)
                 .sort(sort),
-            this.model.countDocuments({ ...(search ?? {}) })
-        ])
-        const totalPages = Math.ceil(totalDoc! / limit)
+            this.model.countDocuments({ ...(tenantFilter ?? {}) })
+        ]);
+        const totalPages = Math.ceil(totalDoc! / limit);
 
         return {
             meta: {
@@ -117,10 +132,8 @@ abstract class BaseRepository<TDocument> {
                 totalDoc
             },
             data
-        }
-
+        };
     }
 }
 
-
-export default BaseRepository
+export default BaseRepository;

@@ -14,7 +14,8 @@ export interface ISale {
     note?: string;
 
     createdBy: Types.ObjectId;
-    createdAt: Date
+    createdAt: Date;
+    companyId: Types.ObjectId;
 }
 
 const salesSchema = new mongoose.Schema<ISale>({
@@ -39,6 +40,11 @@ const salesSchema = new mongoose.Schema<ISale>({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
+    },
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 
 

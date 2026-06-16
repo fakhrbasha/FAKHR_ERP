@@ -17,8 +17,7 @@ const employeeSchema = new mongoose_1.default.Schema({
     },
     phone: {
         type: String,
-        trim: true,
-        unique: true
+        trim: true
     },
     departmentId: {
         type: mongoose_1.default.Schema.Types.ObjectId,
@@ -28,6 +27,11 @@ const employeeSchema = new mongoose_1.default.Schema({
     role: {
         type: String,
         required: true
+    },
+    companyId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 }, {
     timestamps: true,
@@ -36,5 +40,6 @@ const employeeSchema = new mongoose_1.default.Schema({
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
+employeeSchema.index({ phone: 1, companyId: 1 }, { unique: true, sparse: true });
 const employeeModel = mongoose_1.default.models.Employees || mongoose_1.default.model("Employee", employeeSchema);
 exports.default = employeeModel;

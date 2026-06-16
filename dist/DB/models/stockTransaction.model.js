@@ -16,7 +16,8 @@ const stockTransactionSchema = new mongoose_1.default.Schema({
     quantity: { type: Number, required: true },
     type: { type: String, enum: Object.values(TransactionStock_Enum), required: true },
     createdBy: { type: mongoose_1.default.Schema.Types.ObjectId, required: true, ref: 'User' },
-    reason: { type: String }
+    reason: { type: String },
+    companyId: { type: mongoose_1.default.Schema.Types.ObjectId, required: true, ref: 'Company' }
 }, {
     timestamps: true,
     strict: true,

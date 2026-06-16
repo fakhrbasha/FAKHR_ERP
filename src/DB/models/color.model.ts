@@ -1,9 +1,10 @@
-import mongoose, { HydratedDocument } from "mongoose"
+import mongoose, { HydratedDocument, Types } from "mongoose"
 
 
 export interface IColor {
     name: string,
-    hexCode?: string
+    hexCode?: string,
+    companyId: Types.ObjectId
 }
 
 
@@ -13,7 +14,12 @@ const colorSchema = new mongoose.Schema<IColor>({
         type: String,
         required: true
     },
-    hexCode: String
+    hexCode: String,
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
+    }
 })
 
 

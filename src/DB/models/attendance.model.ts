@@ -7,7 +7,8 @@ export interface IAttendance {
     checkIn: Date,
     checkOut?: Date,
     status: attendanceStatus,
-    overTimeHours?: number
+    overTimeHours?: number,
+    companyId: Types.ObjectId
 }
 
 const attendanceSchema = new mongoose.Schema<IAttendance>({
@@ -35,6 +36,11 @@ const attendanceSchema = new mongoose.Schema<IAttendance>({
     overTimeHours: {
         type: Number,
         default: 0
+    },
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 
 }, {

@@ -27,7 +27,8 @@ export interface IProduct {
 
     availableColors: string[];
     quantity: number,
-    imagePublicId: string
+    imagePublicId: string;
+    companyId: Types.ObjectId;
 
 }
 
@@ -41,7 +42,6 @@ const productSchema = new mongoose.Schema<IProduct>({
     sku: {
         type: String,
         required: true,
-        unique: true,
         trim: true
     },
 
@@ -81,7 +81,12 @@ const productSchema = new mongoose.Schema<IProduct>({
         type: Boolean,
         default: true
     }
-    , imagePublicId: String
+    , imagePublicId: String,
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
+    }
 
 
 }, {
@@ -92,6 +97,8 @@ const productSchema = new mongoose.Schema<IProduct>({
     toObject: { virtuals: true }
 
 })
+
+productSchema.index({ sku: 1, companyId: 1 }, { unique: true });
 
 const productModel = mongoose.models.Product || mongoose.model<IProduct>("Product", productSchema)
 

@@ -11,14 +11,18 @@ const materialSchema = new mongoose_1.default.Schema({
         required: true
     },
     code: {
-        type: String,
-        unique: true
+        type: String
     },
     description: String,
     unit: {
         type: String,
         enum: material_enum_1.UnitEnum,
         default: material_enum_1.UnitEnum.kg
+    },
+    companyId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 }, {
     timestamps: true,
@@ -27,5 +31,6 @@ const materialSchema = new mongoose_1.default.Schema({
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
+materialSchema.index({ code: 1, companyId: 1 }, { unique: true, sparse: true });
 const materialModel = mongoose_1.default.models.Material || mongoose_1.default.model("Material", materialSchema);
 exports.default = materialModel;

@@ -12,7 +12,8 @@ export interface INotification {
     message: string,
     type: NotificationType,
     isRead: boolean,
-    userId: Types.ObjectId
+    userId: Types.ObjectId,
+    companyId: Types.ObjectId
 }
 
 const notificationSchema = new mongoose.Schema<INotification>({
@@ -26,6 +27,11 @@ const notificationSchema = new mongoose.Schema<INotification>({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
+    },
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 }, {
     timestamps: true

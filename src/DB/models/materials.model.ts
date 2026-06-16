@@ -1,4 +1,4 @@
-import mongoose, { HydratedDocument } from "mongoose"
+import mongoose, { HydratedDocument, Types } from "mongoose"
 import { string } from "zod"
 import { UnitEnum } from "../../common/enums/material.enum"
 
@@ -7,7 +7,8 @@ export interface IMaterial {
     name: string,
     code?: string,
     description?: string,
-    unit: UnitEnum
+    unit: UnitEnum,
+    companyId: Types.ObjectId
 }
 
 
@@ -17,14 +18,18 @@ const materialSchema = new mongoose.Schema<IMaterial>({
         required: true
     },
     code: {
-        type: String,
-        unique: true
+        type: String
     },
     description: String,
     unit: {
         type: String,
         enum: UnitEnum,
         default: UnitEnum.kg
+    },
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 }, {
     timestamps: true,
@@ -33,6 +38,8 @@ const materialSchema = new mongoose.Schema<IMaterial>({
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 })
+
+materialSchema.index({ code: 1, companyId: 1 }, { unique: true, sparse: true });
 
 
 const materialModel = mongoose.models.Material || mongoose.model<IMaterial>("Material", materialSchema)

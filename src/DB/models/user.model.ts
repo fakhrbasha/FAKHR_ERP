@@ -11,6 +11,7 @@ export interface IUser {
     role?: RoleEnum,
     password: string,
     isConfirmed: boolean,
+    companyId: Types.ObjectId,
 
     pictures?: string[],
     createdAt?: Date,
@@ -48,6 +49,11 @@ const userSchema = new mongoose.Schema<IUser>({
         type: String,
         enum: Object.values(RoleEnum),
         default: RoleEnum.ADMIN
+    },
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 
 }, {

@@ -35,6 +35,11 @@ const userSchema = new mongoose_1.default.Schema({
         type: String,
         enum: Object.values(user_enum_1.RoleEnum),
         default: user_enum_1.RoleEnum.ADMIN
+    },
+    companyId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 }, {
     timestamps: true,

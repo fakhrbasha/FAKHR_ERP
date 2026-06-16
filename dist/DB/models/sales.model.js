@@ -27,6 +27,11 @@ const salesSchema = new mongoose_1.default.Schema({
     createdBy: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: "User"
+    },
+    companyId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 }, {
     timestamps: true

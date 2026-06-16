@@ -6,8 +6,8 @@ export interface IExpenses {
     category: string,
     expenseDate: Date,
     note?: string,
-    createdBy: Types.ObjectId
-
+    createdBy: Types.ObjectId,
+    companyId: Types.ObjectId
 }
 
 const expensesSchema = new mongoose.Schema<IExpenses>({
@@ -35,6 +35,11 @@ const expensesSchema = new mongoose.Schema<IExpenses>({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "User"
+    },
+    companyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     }
 
 }, {

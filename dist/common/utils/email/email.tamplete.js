@@ -45,7 +45,7 @@ const templateEmail = (otp) => {
 
             <tr>
               <td align="center" style="padding-top:20px; font-size:12px; color:#aaa;">
-                © 2026 Your Company. All rights reserved.
+                © 2026 FAKHR-ERP. All rights reserved.
               </td>
             </tr>
 
