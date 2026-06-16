@@ -17,6 +17,7 @@ import { WAREHOUSE_EMAIL } from "../../config/config.service"
 import { EmailEnum } from "../../common/enums/user.enum"
 import StockTransactionRepository from "../../DB/repository/stockTransaction.repository"
 import { TransactionStock_Enum } from "../../DB/models/stockTransaction.model"
+import { templateLowStock } from "../../common/utils/email/lowStock..templete"
 
 
 
@@ -151,12 +152,22 @@ class StockTransactionService {
         });
 
         if (newQuantity <= stock.minQuantity) {
-            eventEmitter.emit(EmailEnum.lowStock, {
-                stock,
-                newQuantity,
-                material,
-                color
+            await sendEmail({
+                to: WAREHOUSE_EMAIL!,
+                subject: "Low Stock Alert",
+                html: templateLowStock({
+                    materialName: material?.name!,
+                    colorName: color?.name!,
+                    currentQuantity: newQuantity,
+                    minQuantity: stock.minQuantity,
+                })
             });
+            // eventEmitter.emit(EmailEnum.lowStock, {
+            //     stock,
+            //     newQuantity,
+            //     material,
+            //     color
+            // });
             eventEmitter.emit(
                 NotificationEventEnum.LOW_STOCK,
                 {

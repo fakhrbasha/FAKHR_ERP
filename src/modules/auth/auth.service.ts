@@ -40,7 +40,7 @@ class UserService {
         const otp = await sendOtp()
         await sendEmail({
             to: email,
-            subject: "Volcano App",
+            subject: "FAKHR-ERP App",
             html: templateEmail(otp)
         })
 
