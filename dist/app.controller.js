@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.bootstrap = void 0;
 const express_1 = __importDefault(require("express"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
-const connectionDB_1 = require("./DB/connectionDB");
 const global_error_handling_1 = require("./common/utils/global-error-handling");
 const config_service_1 = require("./config/config.service");
 const redis_service_1 = __importDefault(require("./common/services/redis.service"));
@@ -26,10 +25,12 @@ const expenses_controller_1 = __importDefault(require("./modules/expenses/expens
 const dashboard_controller_1 = __importDefault(require("./modules/dashboard/dashboard.controller"));
 const Reports_controller_1 = __importDefault(require("./modules/Reports/Reports.controller"));
 const notification_controller_1 = __importDefault(require("./modules/notification/notification.controller"));
+const connectionDB_1 = require("./DB/connectionDB");
 const sales_controller_1 = __importDefault(require("./modules/sales/sales.controller"));
 const returnSales_controller_1 = __importDefault(require("./modules/return sales/returnSales.controller"));
 const accounting_controller_1 = __importDefault(require("./modules/accounting/accounting.controller"));
 const cors_1 = __importDefault(require("cors"));
+const shift_controller_1 = __importDefault(require("./modules/shift/shift.controller"));
 const app = (0, express_1.default)();
 const port = config_service_1.PORT || 3000;
 app.use((0, cors_1.default)());
@@ -43,13 +44,11 @@ app.get('/api-docs.json', (_req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swagger_config_1.swaggerSpec);
 });
-app.use(async (req, res, next) => {
-    await (0, connectionDB_1.connectDB)();
-    await redis_service_1.default.connect();
-    next();
-});
+(0, connectionDB_1.checkConnection)();
+redis_service_1.default.connect();
 app.use('/auth', auth_controller_1.default);
 app.use('/department', department_controller_1.default);
+app.use('/shift', shift_controller_1.default);
 app.use('/attendance', attendance_controller_1.default);
 app.use('/employee', employee_controller_1.default);
 app.use('/material', material_controller_1.default);

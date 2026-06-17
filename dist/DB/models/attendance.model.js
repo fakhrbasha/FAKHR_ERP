@@ -27,15 +27,27 @@ const attendanceSchema = new mongoose_1.default.Schema({
         enum: attendance_enum_1.attendanceStatus,
         default: attendance_enum_1.attendanceStatus.present
     },
-    overTimeHours: {
-        type: Number,
-        default: 0
-    },
     companyId: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: "Company",
         required: true
-    }
+    },
+    workedHours: {
+        type: Number,
+        default: 0
+    },
+    overtimeHours: {
+        type: Number,
+        default: 0
+    },
+    missingHours: {
+        type: Number,
+        default: 0
+    },
+    lateMinutes: {
+        type: Number,
+        default: 0
+    },
 }, {
     timestamps: true,
     strict: true,

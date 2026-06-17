@@ -32,6 +32,11 @@ const employeeSchema = new mongoose_1.default.Schema({
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: "Company",
         required: true
+    },
+    shiftId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Shift",
+        required: true
     }
 }, {
     timestamps: true,

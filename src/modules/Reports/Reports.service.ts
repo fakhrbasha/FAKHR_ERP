@@ -47,134 +47,130 @@ class SupplierService {
 
         const filter: any = {};
 
-        // filter by category
         if (category) {
             filter.category = category;
         }
 
-        // filter by date range
         if (from || to) {
-
             filter.expenseDate = {};
 
             if (from) {
-                filter.expenseDate.$gte =
-                    new Date(from as string);
+                const fromDate = new Date(from as string);
+                if (isNaN(fromDate.getTime())) {
+                    throw new AppError("Invalid from date", 400);
+                }
+                filter.expenseDate.$gte = fromDate;
             }
 
             if (to) {
-                filter.expenseDate.$lte =
-                    new Date(to as string);
+                const toDate = new Date(to as string);
+                if (isNaN(toDate.getTime())) {
+                    throw new AppError("Invalid to date", 400);
+                }
+                filter.expenseDate.$lte = toDate;
             }
         }
 
-        const expenses =
-            await this._expenseModel.find({
-                filter,
-                options: {
-                    sort: {
-                        expenseDate: -1
-                    }
-                }
-            });
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
 
-        const totalExpenses =
-            expenses.reduce(
-                (sum, expense) =>
-                    sum + expense.amount,
-                0
-            );
+        const expensesResult = await this._expenseModel.paginate({
+            page,
+            limit,
+            search: {
+                ...filter
+            },
+            sort: {
+                expenseDate: -1
+            }
+        });
+
+        const expenses = expensesResult.data;
+
+        const totalExpenses = expenses.reduce(
+            (sum: number, expense: any) =>
+                sum + (expense.amount || 0),
+            0
+        );
 
         return successResponse({
             res,
             status: 200,
-            message:
-                "Expense report retrieved successfully",
+            message: "Expense report retrieved successfully",
             data: {
                 totalExpenses,
                 count: expenses.length,
+                meta: expensesResult.meta,
                 expenses
             }
         });
     };
-
     getAttendanceReport = async (
         req: Request,
         res: Response,
         next: NextFunction
     ) => {
-
-        const { employeeId, from, to } = req.query;
+        const { employeeId, fromDate, toDate } = req.query;
 
         const filter: any = {};
 
+        // ================= employee filter =================
         if (employeeId) {
-            filter.employeeId = employeeId;
+            if (!mongoose.Types.ObjectId.isValid(employeeId as string)) {
+                throw new AppError("Invalid employee id", 400);
+            }
+            filter.employeeId = new mongoose.Types.ObjectId(employeeId as string);
         }
 
-        if (from || to) {
-
-            filter.date = {};
-
-            if (from) {
-                filter.date.$gte =
-                    new Date(from as string);
-            }
-
-            if (to) {
-                filter.date.$lte =
-                    new Date(to as string);
-            }
+        // ================= date filter =================
+        if (fromDate && toDate) {
+            filter.date = {
+                $gte: new Date(fromDate as string),
+                $lte: new Date(toDate as string)
+            };
         }
 
-        const attendance =
-            await this._attendanceModel.find({
-                filter,
-                options: {
-                    populate: [
-                        {
-                            path: "employeeId",
-                            select: "fullName role"
-                        }
-                    ],
-                    sort: {
-                        date: -1
-                    }
+        const attendance = await this._attendanceModel.find({
+            filter,
+            options: {
+                populate: {
+                    path: "employeeId",
+                    select: "fullName salary role"
                 }
-            });
+            }
+        });
 
-        const totalPresent =
-            attendance.filter(
-                item => item.status === "present"
-            ).length;
+        // ================= SUMMARY =================
+        let totalWorkedHours = 0;
+        let totalOvertime = 0;
+        let totalMissing = 0;
+        let presentDays = 0;
+        let lateDays = 0;
+        let absentDays = 0;
 
-        const totalAbsent =
-            attendance.filter(
-                item => item.status === "absent"
-            ).length;
+        for (const record of attendance) {
+            totalWorkedHours += record.workedHours || 0;
+            totalOvertime += record.overtimeHours || 0;
+            totalMissing += record.missingHours || 0;
 
-        const totalLate =
-            attendance.filter(
-                item => item.status === "late"
-            ).length;
+            if (record.status === "present") presentDays++;
+            if (record.status === "late") lateDays++;
+            if (record.status === "absent") absentDays++;
+        }
 
-        const totalOvertime =
-            attendance.reduce(
-                (sum, item) =>
-                    sum + (item.overTimeHours || 0),
-                0
-            );
-
-        return successResponse({
-            res,
-            status: 200,
-            message:
-                "Attendance report retrieved successfully",
+        return res.status(200).json({
+            success: true,
+            message: "Attendance report generated successfully",
             data: {
-                totalPresent,
-                totalAbsent,
-                totalLate,
-                totalOvertime,
+                summary: {
+                    totalWorkedHours: Number(totalWorkedHours.toFixed(2)),
+                    totalOvertime: Number(totalOvertime.toFixed(2)),
+                    totalMissing: Number(totalMissing.toFixed(2)),
+                    presentDays,
+                    lateDays,
+                    absentDays,
+                    totalRecords: attendance.length
+                },
                 records: attendance
             }
         });

@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import swaggerUi from "swagger-ui-express";
-import { connectDB } from "./DB/connectionDB"
+// import { connectDB } from "./DB/connectionDB"
 import { AppError, globalErrorHandler } from "./common/utils/global-error-handling";
 import { PORT } from "./config/config.service";
 import redisService from "./common/services/redis.service";
@@ -20,11 +20,12 @@ import expensesRouter from "./modules/expenses/expenses.controller";
 import dashboardRouter from "./modules/dashboard/dashboard.controller";
 import reportsRouter from "./modules/Reports/Reports.controller";
 import notificationRouter from "./modules/notification/notification.controller";
-// import { checkConnection } from "./DB/connectionDB";
+import { checkConnection } from "./DB/connectionDB";
 import salesRouter from "./modules/sales/sales.controller";
 import returnSalesRouter from "./modules/return sales/returnSales.controller";
 import accountingRouter from "./modules/accounting/accounting.controller";
 import cors from "cors";
+import shiftRouter from "./modules/shift/shift.controller";
 const app: express.Application = express();
 const port = PORT || 3000
 app.use(cors());
@@ -41,16 +42,17 @@ app.get('/api-docs.json', (_req: Request, res: Response) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
 });
-app.use(async (req, res, next) => {
-    await connectDB();
-    await redisService.connect();
-    next();
-});
-// checkConnection()
-// redisService.connect()
+// app.use(async (req, res, next) => {
+//     await connectDB();
+//     await redisService.connect();
+//     next();
+// });
+checkConnection()
+redisService.connect()
 
 app.use('/auth', authRouter)
 app.use('/department', departmentRouter)
+app.use('/shift', shiftRouter)
 app.use('/attendance', attendanceRouter)
 app.use('/employee', employeeRouter)
 app.use('/material', materialRouter)

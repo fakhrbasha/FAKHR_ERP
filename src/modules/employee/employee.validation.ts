@@ -7,6 +7,7 @@ export const createUserSchema = {
         salary: z.number(),
         phone: z.string(),
         role: z.string(),
+        shiftId: generalRules.id
     })
     ,
     params: z.object({

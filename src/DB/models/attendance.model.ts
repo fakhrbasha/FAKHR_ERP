@@ -2,15 +2,21 @@ import mongoose, { HydratedDocument, Types, Schema } from "mongoose"
 import { attendanceStatus } from "../../common/enums/attendance.enum"
 
 export interface IAttendance {
-    employeeId: Types.ObjectId,
-    date: Date,
-    checkIn: Date,
-    checkOut?: Date,
-    status: attendanceStatus,
-    overTimeHours?: number,
-    companyId: Types.ObjectId
-}
+    employeeId: Types.ObjectId;
+    date?: Date;
 
+    checkIn: Date;
+    checkOut?: Date;
+
+    workedHours: number;
+    overtimeHours: number;
+    missingHours: number;
+    lateMinutes: number;
+
+    status: attendanceStatus;
+
+    companyId: Types.ObjectId;
+}
 const attendanceSchema = new mongoose.Schema<IAttendance>({
     employeeId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -33,15 +39,28 @@ const attendanceSchema = new mongoose.Schema<IAttendance>({
         enum: attendanceStatus,
         default: attendanceStatus.present
     },
-    overTimeHours: {
-        type: Number,
-        default: 0
-    },
+
     companyId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Company",
         required: true
-    }
+    },
+    workedHours: {
+        type: Number,
+        default: 0
+    },
+    overtimeHours: {
+        type: Number,
+        default: 0
+    },
+    missingHours: {
+        type: Number,
+        default: 0
+    },
+    lateMinutes: {
+        type: Number,
+        default: 0
+    },
 
 }, {
     timestamps: true,

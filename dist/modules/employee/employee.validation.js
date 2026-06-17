@@ -9,6 +9,7 @@ exports.createUserSchema = {
         salary: zod_1.z.number(),
         phone: zod_1.z.string(),
         role: zod_1.z.string(),
+        shiftId: generalRules_1.generalRules.id
     }),
     params: zod_1.z.object({
         departmentId: generalRules_1.generalRules.id

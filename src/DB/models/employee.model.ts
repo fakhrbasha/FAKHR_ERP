@@ -7,6 +7,7 @@ export interface IEmployee {
     phone?: string;
     departmentId?: Types.ObjectId,
     role: string;
+    shiftId: Types.ObjectId,
     companyId: Types.ObjectId;
 }
 
@@ -37,6 +38,11 @@ const employeeSchema = new mongoose.Schema<IEmployee>({
     companyId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Company",
+        required: true
+    },
+    shiftId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Shift",
         required: true
     }
 
