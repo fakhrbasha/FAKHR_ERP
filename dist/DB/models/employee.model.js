@@ -21,7 +21,7 @@ const employeeSchema = new mongoose_1.default.Schema({
     },
     departmentId: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "Departments",
+        ref: "Department",
         required: true
     },
     role: {
