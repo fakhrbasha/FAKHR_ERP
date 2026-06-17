@@ -53,7 +53,8 @@ class NotificationsService {
             await this._notificationModel.paginate({
                 page,
                 limit,
-                search: searchQuery
+                search: searchQuery,
+                sort: { createdAt: -1 }
             });
 
         return successResponse({
@@ -92,7 +93,8 @@ class NotificationsService {
 
     unreadCount = async (req: Request, res: Response, next: NextFunction) => {
         const count = await this._notificationModel.count({
-            isRead: false
+            isRead: false,
+            companyId: req.user.companyId
         });
 
         return successResponse({

@@ -7,6 +7,7 @@ const notificationRouter = Router()
 
 notificationRouter.get('/', authentication, notificationService.getNotifications)
 notificationRouter.get('/unread-count', authentication, notificationService.unreadCount)
-notificationRouter.get('/:id/read', authentication, notificationService.readNotification)
+// notificationRouter.get('/:id/read', authentication, notificationService.readNotification)
+notificationRouter.patch('/:id/read', authentication, notificationService.readNotification)
 
 export default notificationRouter

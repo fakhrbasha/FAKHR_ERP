@@ -9,5 +9,5 @@ const notification_service_1 = __importDefault(require("./notification.service")
 const notificationRouter = (0, express_1.Router)();
 notificationRouter.get('/', authentication_1.authentication, notification_service_1.default.getNotifications);
 notificationRouter.get('/unread-count', authentication_1.authentication, notification_service_1.default.unreadCount);
-notificationRouter.get('/:id/read', authentication_1.authentication, notification_service_1.default.readNotification);
+notificationRouter.patch('/:id/read', authentication_1.authentication, notification_service_1.default.readNotification);
 exports.default = notificationRouter;
