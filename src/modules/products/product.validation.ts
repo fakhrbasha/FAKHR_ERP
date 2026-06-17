@@ -13,6 +13,7 @@ export const createProductSchema = {
         availableSizes: z.array(z.nativeEnum(ProductSize)),
         availableColors: z.string().array(),
         quantity: z.string(),
+
         // imagePublicId: z.string()
     })
 
@@ -39,27 +40,6 @@ export const updateSupplierSchema = {
         note: z.string().max(200).optional()
     })
 }
-// export const editProductSchema = {
-//     params: z.object({
-//         id: generalRules.id
-//     }),
-//     body: createProductSchema.body.partial()
-//     // body: createSupplierSchema.body.safeExtend({}).optional()
-//     // body: z.object({
-//     //     name: z.string(),
-//     //     sku: z.string(),
-//     //     description: z.string().optional(),
-//     //     category: z.string(),
-//     //     sellingPrice: z.string(),
-//     //     image: z.string().optional(),
-//     //     isActive: z.boolean().optional(),
-//     //     availableSizes: z.array(z.nativeEnum(ProductSize)),
-//     //     availableColors: z.string().array(),
-//     //     quantity: z.string(),
-
-//     //     // imagePublicId: z.string()
-//     // })
-// }
 
 export const editProductSchema = {
     params: z.object({
@@ -72,9 +52,14 @@ export const editProductSchema = {
         category: z.string().optional(),
         sellingPrice: z.string().optional(),
         image: z.string().optional(),
-        isActive: z.boolean().optional(),
+
+
         availableSizes: z.array(z.nativeEnum(ProductSize)).optional(),
         availableColors: z.array(z.string()).optional(),
-        quantity: z.string().optional()
+        quantity: z.string().optional(),
+        isActive: z.union([z.boolean(), z.string()]).transform((val) => {
+            if (typeof val === "boolean") return val;
+            return val === "true" || val === "1";
+        }).optional()
     })
 }

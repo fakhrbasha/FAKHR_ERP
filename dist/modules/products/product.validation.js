@@ -46,9 +46,13 @@ exports.editProductSchema = {
         category: zod_1.z.string().optional(),
         sellingPrice: zod_1.z.string().optional(),
         image: zod_1.z.string().optional(),
-        isActive: zod_1.z.boolean().optional(),
         availableSizes: zod_1.z.array(zod_1.z.nativeEnum(product_model_1.ProductSize)).optional(),
         availableColors: zod_1.z.array(zod_1.z.string()).optional(),
-        quantity: zod_1.z.string().optional()
+        quantity: zod_1.z.string().optional(),
+        isActive: zod_1.z.union([zod_1.z.boolean(), zod_1.z.string()]).transform((val) => {
+            if (typeof val === "boolean")
+                return val;
+            return val === "true" || val === "1";
+        }).optional()
     })
 };
