@@ -89,7 +89,7 @@ class AttendanceService {
         };
         const start = parseTimeToDate(checkIn);
         const end = parseTimeToDate(checkOut);
-        if (end <= start) {
+        if (end < start) {
             end.setDate(end.getDate() + 1);
         }
         if (isNaN(start.getTime()) || isNaN(end.getTime())) {
