@@ -9,4 +9,5 @@ const attendance_service_1 = __importDefault(require("./attendance.service"));
 const attendanceRouter = (0, express_1.Router)();
 attendanceRouter.get('/', authentication_1.authentication, attendance_service_1.default.getAttendance);
 attendanceRouter.post('/:employeeId', authentication_1.authentication, attendance_service_1.default.createAttendance);
+attendanceRouter.get('/:id', authentication_1.authentication, attendance_service_1.default.getAttendanceById);
 exports.default = attendanceRouter;

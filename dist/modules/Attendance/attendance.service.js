@@ -145,5 +145,35 @@ class AttendanceService {
             data: attendance
         });
     };
+    getAttendanceById = async (req, res, next) => {
+        const { id } = req.params;
+        if (Array.isArray(id)) {
+            throw new global_error_handling_1.AppError("Invalid employee id", 400);
+        }
+        if (!mongoose_1.default.Types.ObjectId.isValid(id)) {
+            throw new global_error_handling_1.AppError("Invalid attendance id", 400);
+        }
+        const attendance = await this._attendanceModel.findOne({
+            filter: { _id: id },
+            options: {
+                populate: {
+                    path: "employeeId",
+                    select: "fullName phone role shiftId",
+                    populate: {
+                        path: "shiftId",
+                        select: "name startTime endTime workingHours"
+                    }
+                }
+            }
+        });
+        if (!attendance) {
+            throw new global_error_handling_1.AppError("Attendance not found", 404);
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Attendance retrieved successfully",
+            data: attendance
+        });
+    };
 }
 exports.default = new AttendanceService();

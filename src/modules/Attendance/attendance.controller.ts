@@ -7,6 +7,7 @@ const attendanceRouter = Router()
 attendanceRouter.get('/', authentication, attendanceService.getAttendance)
 
 attendanceRouter.post('/:employeeId', authentication, attendanceService.createAttendance)
+attendanceRouter.get('/:id', authentication, attendanceService.getAttendanceById)
 // attendanceRouter.post('/check-out/:employeeId', authentication, attendanceService.checkOut)
 
 
