@@ -3,6 +3,7 @@ import { AppError } from "../../common/utils/global-error-handling"
 import EmployeeRepository from "../../DB/repository/employee.repository"
 import { successResponse } from "../../common/utils/success.response"
 import EmployeePaymentRepository from "../../DB/repository/payroll.repository"
+import mongoose from "mongoose"
 
 
 
@@ -62,44 +63,54 @@ class PaymentEmployee {
         res: Response,
         next: NextFunction
     ) => {
-
         const { employeeId } = req.params;
+        if (Array.isArray(employeeId)) {
 
-        const employee =
-            await this._employeeModel.findOne({
-                filter: { _id: employeeId }
-            });
-
-        if (!employee) {
-            throw new AppError(
-                "Employee not found",
-                404
-            );
+            throw new AppError("Invalid employee id", 400);
+        }
+        if (!mongoose.Types.ObjectId.isValid(employeeId)) {
+            throw new AppError("Invalid employee id", 400);
         }
 
-        const payments =
-            await this._payrollModel.find({
-                filter: { employeeId }
-            });
+        const employee = await this._employeeModel.findOne({
+            filter: { _id: employeeId }
+        });
 
-        const totalPaid =
-            payments.reduce(
-                (sum, payment) =>
-                    sum + payment.amount,
-                0
-            );
+        if (!employee) {
+            throw new AppError("Employee not found", 404);
+        }
+
+        const payments = await this._payrollModel.find({
+            filter: { employeeId }
+        });
+
+        const weeksWorked = payments.length;
+
+        const totalPaid = payments.reduce(
+            (sum, payment) => sum + payment.amount,
+            0
+        );
+
+        const expectedSalary = weeksWorked * employee.salary;
+
+        const balance = expectedSalary - totalPaid;
 
         return successResponse({
             res,
             status: 200,
-            message:
-                "Employee payment summary retrieved successfully",
+            message: "Employee payment summary retrieved successfully",
             data: {
                 employeeId: employee._id,
-                employeeName:
-                    `${employee.fullName}`,
+                employeeName: employee.fullName,
+
+                salaryPerWeek: employee.salary,
+
+                weeksWorked,
+                expectedSalary,
+
                 totalPaid,
-                paymentsCount: payments.length
+
+                balance
             }
         });
     };

@@ -7,6 +7,7 @@ const global_error_handling_1 = require("../../common/utils/global-error-handlin
 const employee_repository_1 = __importDefault(require("../../DB/repository/employee.repository"));
 const success_response_1 = require("../../common/utils/success.response");
 const payroll_repository_1 = __importDefault(require("../../DB/repository/payroll.repository"));
+const mongoose_1 = __importDefault(require("mongoose"));
 class PaymentEmployee {
     _employeeModel = new employee_repository_1.default();
     _payrollModel = new payroll_repository_1.default();
@@ -38,6 +39,12 @@ class PaymentEmployee {
     };
     getEmployeePaymentSummary = async (req, res, next) => {
         const { employeeId } = req.params;
+        if (Array.isArray(employeeId)) {
+            throw new global_error_handling_1.AppError("Invalid employee id", 400);
+        }
+        if (!mongoose_1.default.Types.ObjectId.isValid(employeeId)) {
+            throw new global_error_handling_1.AppError("Invalid employee id", 400);
+        }
         const employee = await this._employeeModel.findOne({
             filter: { _id: employeeId }
         });
@@ -47,16 +54,22 @@ class PaymentEmployee {
         const payments = await this._payrollModel.find({
             filter: { employeeId }
         });
+        const weeksWorked = payments.length;
         const totalPaid = payments.reduce((sum, payment) => sum + payment.amount, 0);
+        const expectedSalary = weeksWorked * employee.salary;
+        const balance = expectedSalary - totalPaid;
         return (0, success_response_1.successResponse)({
             res,
             status: 200,
             message: "Employee payment summary retrieved successfully",
             data: {
                 employeeId: employee._id,
-                employeeName: `${employee.fullName}`,
+                employeeName: employee.fullName,
+                salaryPerWeek: employee.salary,
+                weeksWorked,
+                expectedSalary,
                 totalPaid,
-                paymentsCount: payments.length
+                balance
             }
         });
     };

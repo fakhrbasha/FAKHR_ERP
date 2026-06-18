@@ -20,7 +20,6 @@ export const connectDB = async () => {
     return cached.conn;
 };
 
-// import mongoose from "mongoose";
 // import { MONGO_URL } from "../config/config.service";
 // // import { MONGO_URI } from "../config/config.service";
 
