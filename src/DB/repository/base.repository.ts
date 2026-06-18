@@ -6,6 +6,8 @@ abstract class BaseRepository<TDocument> {
 
     private getTenantFilter(filter: any = {}): any {
         const companyId = tenantStorage.getCompanyId();
+
+        // console.log("Tenant CompanyId:", companyId);
         if (!companyId || this.model.modelName === "Company") {
             return filter;
         }
@@ -107,9 +109,9 @@ abstract class BaseRepository<TDocument> {
         search?: QueryFilter<T>
     }) {
         page = +page! || 1;
-        limit = +limit! || 2;
+        limit = +limit! || 20;
         if (page < 0) page = 1;
-        if (limit < 0) limit = 2;
+        if (limit < 0) limit = 20;
         const skip = (page - 1) * limit;
 
         const tenantFilter = this.getTenantFilter(search);
@@ -123,7 +125,9 @@ abstract class BaseRepository<TDocument> {
             this.model.countDocuments({ ...(tenantFilter ?? {}) })
         ]);
         const totalPages = Math.ceil(totalDoc! / limit);
-
+        // console.log(
+        //     await this.model.find({})
+        // );
         return {
             meta: {
                 currentPage: page,

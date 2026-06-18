@@ -26,6 +26,7 @@ import returnSalesRouter from "./modules/return sales/returnSales.controller";
 import accountingRouter from "./modules/accounting/accounting.controller";
 import cors from "cors";
 import shiftRouter from "./modules/shift/shift.controller";
+import payrollRouter from "./modules/payroll/payroll.controller";
 const app: express.Application = express();
 const port = PORT || 3000
 app.use(cors());
@@ -69,6 +70,7 @@ app.use('/notifications', notificationRouter)
 app.use('/sales', salesRouter)
 app.use('/return-sales', returnSalesRouter)
 app.use('/accounting', accountingRouter)
+// app.use('/employee-payment', payrollRouter)
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({ message: "Welcome Fakhr In Your Home" })
 })

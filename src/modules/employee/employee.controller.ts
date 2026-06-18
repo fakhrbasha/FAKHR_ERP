@@ -3,7 +3,12 @@ import { validation } from "../../common/middleware/validation";
 import * as employeeValidation from './employee.validation'
 import EmployeeService from "./employee.service";
 import { authentication } from "../../common/middleware/authentication";
+import payrollRouter from "../payroll/payroll.controller";
 const employeeRouter = Router()
+
+employeeRouter.use('/employee-payment', payrollRouter)
+
+
 employeeRouter.post('/create-employee/:departmentId', authentication,
     validation(employeeValidation.createUserSchema),
     EmployeeService.createEmployee)

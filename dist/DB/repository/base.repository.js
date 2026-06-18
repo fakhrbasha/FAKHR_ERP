@@ -57,11 +57,11 @@ class BaseRepository {
     }
     async paginate({ page, limit, sort, populate, search }) {
         page = +page || 1;
-        limit = +limit || 2;
+        limit = +limit || 20;
         if (page < 0)
             page = 1;
         if (limit < 0)
-            limit = 2;
+            limit = 20;
         const skip = (page - 1) * limit;
         const tenantFilter = this.getTenantFilter(search);
         const [data, totalDoc] = await Promise.all([

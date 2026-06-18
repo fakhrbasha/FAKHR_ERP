@@ -282,9 +282,9 @@ class UserService {
                 role,
                 phone,
                 isConfirmed: true,
-                companyId: req.user.companyId  // inherit from the logged-in Admin
+                companyId: req.user.companyId
             });
-
+        // console.log("User CompanyId:", req.user.companyId);
         successResponse({
             res,
             status: 201,
@@ -335,6 +335,7 @@ class UserService {
         const page = Number(req.query.page)
         const limit = Number(req.query.limit)
         const users = await this._userModel.paginate({ page, limit })
+
 
         successResponse({ res, message: "users fetched success", data: users })
     }
