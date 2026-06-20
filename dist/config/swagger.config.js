@@ -35,7 +35,9 @@ const swaggerDefinition = {
         { name: "Supplier", description: "Supplier management endpoints" },
         { name: "Purchase Order", description: "Purchase order management endpoints" },
         { name: "Expenses", description: "Expenses management endpoints" },
-        { name: "Notification", description: "Notification management endpoints" }
+        { name: "Notification", description: "Notification management endpoints" },
+        { name: "Shift", description: "Work shift management endpoints" },
+        { name: "Payroll", description: "Employee payroll & payment endpoints" }
     ],
     components: {
         securitySchemes: {
@@ -134,6 +136,7 @@ const swaggerDefinition = {
                     salary: { type: "number", example: 5000 },
                     phone: { type: "string", example: "01098765432" },
                     role: { type: "string", example: "supervisor" },
+                    shiftId: { type: "string", example: "664f1c2e3a1b2c3d4e5f6a7b" },
                 },
             },
             UpdateEmployeeBody: {
@@ -144,6 +147,44 @@ const swaggerDefinition = {
                     phone: { type: "string", example: "01098765432" },
                     role: { type: "string", example: "manager" },
                     departmentId: { type: "string", example: "664f1c2e3a1b2c3d4e5f6a7b" },
+                    shiftId: { type: "string", example: "664f1c2e3a1b2c3d4e5f6a7b" },
+                },
+            },
+            CreateShiftBody: {
+                type: "object",
+                required: ["name", "startTime", "endTime", "workingHours"],
+                properties: {
+                    name: { type: "string", example: "Morning Shift" },
+                    startTime: { type: "string", example: "08:00" },
+                    endTime: { type: "string", example: "16:00" },
+                    workingHours: { type: "number", example: 8 },
+                },
+            },
+            UpdateShiftBody: {
+                type: "object",
+                properties: {
+                    name: { type: "string", example: "Night Shift" },
+                    startTime: { type: "string", example: "22:00" },
+                    endTime: { type: "string", example: "06:00" },
+                    workingHours: { type: "number", example: 8 },
+                },
+            },
+            CreateAttendanceBody: {
+                type: "object",
+                required: ["checkIn", "checkOut"],
+                properties: {
+                    checkIn: { type: "string", example: "08:05", description: "Check-in time in HH:mm format. Use 00:00 for absent." },
+                    checkOut: { type: "string", example: "16:10", description: "Check-out time in HH:mm format. Use 00:00 for absent." },
+                },
+            },
+            CreatePayrollBody: {
+                type: "object",
+                required: ["employeeId", "amount"],
+                properties: {
+                    employeeId: { type: "string", example: "664f1c2e3a1b2c3d4e5f6a7b" },
+                    amount: { type: "number", minimum: 0.01, example: 5000 },
+                    week: { type: "string", example: "2026-W24", description: "Optional week identifier" },
+                    note: { type: "string", maxLength: 200, example: "Weekly payment" },
                 },
             },
             AddMaterialBody: {
