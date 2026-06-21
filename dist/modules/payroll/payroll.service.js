@@ -48,18 +48,65 @@ class PaymentEmployee {
             throw new global_error_handling_1.AppError("Invalid employee id", 400);
         }
         const employee = await this._employeeModel.findOne({
-            filter: { _id: employeeId }
+            filter: { _id: employeeId },
+            options: {
+                populate: {
+                    path: "shiftId"
+                }
+            }
         });
         if (!employee) {
             throw new global_error_handling_1.AppError("Employee not found", 404);
         }
-        const payments = await this._payrollModel.find({
-            filter: { employeeId }
+        const shift = employee.shiftId;
+        if (!shift) {
+            throw new global_error_handling_1.AppError("Employee does not have a shift assigned", 400);
+        }
+        const now = new Date();
+        const startOfWeek = new Date(now);
+        startOfWeek.setHours(0, 0, 0, 0);
+        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(endOfWeek.getDate() + 6);
+        endOfWeek.setHours(23, 59, 59, 999);
+        const attendances = await this._attendanceModel.find({
+            filter: {
+                employeeId,
+                date: {
+                    $gte: startOfWeek,
+                    $lte: endOfWeek
+                }
+            }
         });
-        const weeksWorked = payments.length;
-        const totalPaid = payments.reduce((sum, payment) => sum + payment.amount, 0);
-        const expectedSalary = weeksWorked * employee.salary;
-        const balance = expectedSalary - totalPaid;
+        const payments = await this._payrollModel.find({
+            filter: {
+                employeeId,
+                paymentDate: {
+                    $gte: startOfWeek,
+                    $lte: endOfWeek
+                }
+            }
+        });
+        const weeklySalary = Number(employee.salary);
+        const workingDays = Number(shift.workingDays) || 7;
+        const shiftHours = Number(shift.workingHours);
+        const weeklyHours = shiftHours * workingDays;
+        const hourRate = weeklyHours > 0
+            ? weeklySalary / weeklyHours
+            : 0;
+        const totalWorkedHours = attendances.reduce((sum, item) => sum + (item.workedHours || 0), 0);
+        const totalMissingHours = attendances.reduce((sum, item) => sum + (item.missingHours || 0), 0);
+        const totalLateMinutes = attendances.reduce((sum, item) => sum + (item.lateMinutes || 0), 0);
+        const totalOvertimeHours = attendances.reduce((sum, item) => sum + (item.overtimeHours || 0), 0);
+        const absentDeduction = totalMissingHours * hourRate;
+        const lateDeduction = (totalLateMinutes / 60) * hourRate;
+        const overtimeAmount = totalOvertimeHours * hourRate;
+        const netSalary = weeklySalary
+            - absentDeduction
+            - lateDeduction
+            + overtimeAmount;
+        const totalPaid = payments.reduce((sum, item) => sum + item.amount, 0);
+        const remainingBalance = netSalary - totalPaid;
         return (0, success_response_1.successResponse)({
             res,
             status: 200,
@@ -67,11 +114,25 @@ class PaymentEmployee {
             data: {
                 employeeId: employee._id,
                 employeeName: employee.fullName,
-                salaryPerWeek: employee.salary,
-                weeksWorked,
-                expectedSalary,
-                totalPaid,
-                balance
+                weekStart: startOfWeek,
+                weekEnd: endOfWeek,
+                weeklySalary,
+                workingDays,
+                shiftHours,
+                weeklyHours,
+                hourRate: Number(hourRate.toFixed(2)),
+                totalWorkedHours: Number(totalWorkedHours.toFixed(2)),
+                totalMissingHours: Number(totalMissingHours.toFixed(2)),
+                totalLateMinutes,
+                totalOvertimeHours: Number(totalOvertimeHours.toFixed(2)),
+                absentDeduction: Number(absentDeduction.toFixed(2)),
+                lateDeduction: Number(lateDeduction.toFixed(2)),
+                overtimeAmount: Number(overtimeAmount.toFixed(2)),
+                netSalary: Number(netSalary.toFixed(2)),
+                totalPaid: Number(totalPaid.toFixed(2)),
+                remainingBalance: Number(remainingBalance.toFixed(2)),
+                attendanceCount: attendances.length,
+                paymentsCount: payments.length
             }
         });
     };
