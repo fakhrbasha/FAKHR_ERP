@@ -25,6 +25,10 @@ const shiftSchema = new mongoose_1.default.Schema({
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: "Company",
         required: true
+    },
+    workingDays: {
+        type: Number,
+        default: 7
     }
 }, {
     timestamps: true

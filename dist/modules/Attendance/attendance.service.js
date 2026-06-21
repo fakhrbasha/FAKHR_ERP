@@ -104,6 +104,9 @@ class AttendanceService {
         shiftStart.setHours(shiftStartH, shiftStartM, 0, 0);
         const shiftEnd = new Date(start);
         shiftEnd.setHours(shiftEndH, shiftEndM, 0, 0);
+        if (shiftEnd <= shiftStart) {
+            shiftEnd.setDate(shiftEnd.getDate() + 1);
+        }
         const diffMs = end.getTime() - start.getTime();
         if (diffMs < 0) {
             throw new global_error_handling_1.AppError("checkOut cannot be before checkIn", 400);
@@ -131,7 +134,7 @@ class AttendanceService {
             employeeId,
             checkIn: start,
             checkOut: end,
-            date: new Date(),
+            date: start,
             workedHours: Number(workedHours.toFixed(2)),
             overtimeHours: Number(overtimeHours.toFixed(2)),
             missingHours: Number(missingHours.toFixed(2)),

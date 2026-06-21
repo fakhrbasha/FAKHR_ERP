@@ -66,10 +66,10 @@ class PaymentEmployee {
     //     next: NextFunction
     // ) => {
     //     const { employeeId } = req.params;
-    //     if (Array.isArray(employeeId)) {
+    // if (Array.isArray(employeeId)) {
 
-    //         throw new AppError("Invalid employee id", 400);
-    //     }
+    //     throw new AppError("Invalid employee id", 400);
+    // }
     //     if (!mongoose.Types.ObjectId.isValid(employeeId)) {
     //         throw new AppError("Invalid employee id", 400);
     //     }
@@ -118,8 +118,7 @@ class PaymentEmployee {
     // };
     getEmployeePaymentSummary = async (
         req: Request,
-        res: Response,
-        next: NextFunction
+        res: Response
     ) => {
         const { employeeId } = req.params;
         if (Array.isArray(employeeId)) {
@@ -147,7 +146,7 @@ class PaymentEmployee {
 
         if (!shift) {
             throw new AppError(
-                "Employee does not have a shift assigned",
+                "Employee has no assigned shift",
                 400
             );
         }
@@ -156,13 +155,25 @@ class PaymentEmployee {
 
         const startOfWeek = new Date(now);
         startOfWeek.setHours(0, 0, 0, 0);
+
+        const day = startOfWeek.getDay();
+
         startOfWeek.setDate(
-            startOfWeek.getDate() - startOfWeek.getDay()
+            startOfWeek.getDate() - day
         );
 
         const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(endOfWeek.getDate() + 6);
-        endOfWeek.setHours(23, 59, 59, 999);
+
+        endOfWeek.setDate(
+            endOfWeek.getDate() + 6
+        );
+
+        endOfWeek.setHours(
+            23,
+            59,
+            59,
+            999
+        );
 
         const attendances =
             await this._attendanceModel.find({
@@ -186,21 +197,15 @@ class PaymentEmployee {
                 }
             });
 
-        const weeklySalary = Number(employee.salary);
-
-        const workingDays =
-            Number(shift.workingDays) || 7;
-
-        const shiftHours =
-            Number(shift.workingHours);
+        const weeklySalary =
+            Number(employee.salary);
 
         const weeklyHours =
-            shiftHours * workingDays;
+            shift.workingHours *
+            shift.workingDays;
 
         const hourRate =
-            weeklyHours > 0
-                ? weeklySalary / weeklyHours
-                : 0;
+            weeklySalary / weeklyHours;
 
         const totalWorkedHours =
             attendances.reduce(
@@ -247,8 +252,8 @@ class PaymentEmployee {
 
         const totalPaid =
             payments.reduce(
-                (sum, item: any) =>
-                    sum + item.amount,
+                (sum, payment: any) =>
+                    sum + payment.amount,
                 0
             );
 
@@ -257,7 +262,6 @@ class PaymentEmployee {
 
         return successResponse({
             res,
-            status: 200,
             message:
                 "Employee payment summary retrieved successfully",
             data: {
@@ -269,26 +273,27 @@ class PaymentEmployee {
 
                 weeklySalary,
 
-                workingDays,
-                shiftHours,
+                shiftHours:
+                    shift.workingHours,
+
+                workingDays:
+                    shift.workingDays,
+
                 weeklyHours,
 
-                hourRate: Number(
-                    hourRate.toFixed(2)
-                ),
+                attendanceDays:
+                    attendances.length,
 
-                totalWorkedHours: Number(
-                    totalWorkedHours.toFixed(2)
-                ),
+                totalWorkedHours,
 
-                totalMissingHours: Number(
-                    totalMissingHours.toFixed(2)
-                ),
+                totalMissingHours,
 
                 totalLateMinutes,
 
-                totalOvertimeHours: Number(
-                    totalOvertimeHours.toFixed(2)
+                totalOvertimeHours,
+
+                hourRate: Number(
+                    hourRate.toFixed(2)
                 ),
 
                 absentDeduction: Number(
@@ -307,19 +312,11 @@ class PaymentEmployee {
                     netSalary.toFixed(2)
                 ),
 
-                totalPaid: Number(
-                    totalPaid.toFixed(2)
-                ),
+                totalPaid,
 
                 remainingBalance: Number(
                     remainingBalance.toFixed(2)
-                ),
-
-                attendanceCount:
-                    attendances.length,
-
-                paymentsCount:
-                    payments.length
+                )
             }
         });
     };

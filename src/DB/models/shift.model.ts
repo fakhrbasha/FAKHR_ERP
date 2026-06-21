@@ -5,6 +5,7 @@ export interface IShift {
     startTime: string;
     endTime: string;
     workingHours: number;
+    workingDays: number;
     companyId: Types.ObjectId;
 }
 
@@ -29,6 +30,10 @@ const shiftSchema = new mongoose.Schema<IShift>({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Company",
         required: true
+    },
+    workingDays: {
+        type: Number,
+        default: 7
     }
 }, {
     timestamps: true
