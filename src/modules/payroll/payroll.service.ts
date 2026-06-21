@@ -209,17 +209,25 @@ class PaymentEmployee {
 
         const totalWorkedHours =
             attendances.reduce(
-                (sum, item: any) =>
+                (sum, item) =>
                     sum + (item.workedHours || 0),
                 0
             );
 
-        const totalMissingHours =
-            attendances.reduce(
-                (sum, item: any) =>
-                    sum + (item.missingHours || 0),
-                0
+        const calculatedMissingHours =
+            Math.max(
+                0,
+                weeklyHours - totalWorkedHours
             );
+
+        const absentDeduction =
+            calculatedMissingHours * hourRate;
+        // const totalMissingHours =
+        //     attendances.reduce(
+        //         (sum, item: any) =>
+        //             sum + (item.missingHours || 0),
+        //         0
+        //     );
 
         const totalLateMinutes =
             attendances.reduce(
@@ -235,8 +243,8 @@ class PaymentEmployee {
                 0
             );
 
-        const absentDeduction =
-            totalMissingHours * hourRate;
+        // const absentDeduction =
+        //     totalMissingHours * hourRate;
 
         const lateDeduction =
             (totalLateMinutes / 60) * hourRate;
@@ -286,7 +294,7 @@ class PaymentEmployee {
 
                 totalWorkedHours,
 
-                totalMissingHours,
+                calculatedMissingHours,
 
                 totalLateMinutes,
 

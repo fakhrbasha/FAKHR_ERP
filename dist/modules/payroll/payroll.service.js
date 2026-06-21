@@ -93,10 +93,10 @@ class PaymentEmployee {
             shift.workingDays;
         const hourRate = weeklySalary / weeklyHours;
         const totalWorkedHours = attendances.reduce((sum, item) => sum + (item.workedHours || 0), 0);
-        const totalMissingHours = attendances.reduce((sum, item) => sum + (item.missingHours || 0), 0);
+        const calculatedMissingHours = Math.max(0, weeklyHours - totalWorkedHours);
+        const absentDeduction = calculatedMissingHours * hourRate;
         const totalLateMinutes = attendances.reduce((sum, item) => sum + (item.lateMinutes || 0), 0);
         const totalOvertimeHours = attendances.reduce((sum, item) => sum + (item.overtimeHours || 0), 0);
-        const absentDeduction = totalMissingHours * hourRate;
         const lateDeduction = (totalLateMinutes / 60) * hourRate;
         const overtimeAmount = totalOvertimeHours * hourRate;
         const netSalary = weeklySalary
@@ -119,7 +119,7 @@ class PaymentEmployee {
                 weeklyHours,
                 attendanceDays: attendances.length,
                 totalWorkedHours,
-                totalMissingHours,
+                calculatedMissingHours,
                 totalLateMinutes,
                 totalOvertimeHours,
                 hourRate: Number(hourRate.toFixed(2)),
