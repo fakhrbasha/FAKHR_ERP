@@ -10,18 +10,95 @@ class ShiftService {
         res: Response,
         next: NextFunction
     ) => {
-        const { name, startTime, endTime, workingHours } = req.body;
-
-        const shift = await this._shiftModel.create({
+        const {
             name,
             startTime,
             endTime,
             workingHours
-        } as any);
+        } = req.body;
+
+        if (
+            !name ||
+            !startTime ||
+            !endTime ||
+            !workingHours
+        ) {
+            throw new AppError(
+                "All fields are required",
+                400
+            );
+        }
+
+        const [startHour, startMinute] =
+            startTime.split(":").map(Number);
+
+        const [endHour, endMinute] =
+            endTime.split(":").map(Number);
+
+        if (
+            isNaN(startHour) ||
+            isNaN(startMinute) ||
+            isNaN(endHour) ||
+            isNaN(endMinute)
+        ) {
+            throw new AppError(
+                "Invalid time format. Use HH:mm",
+                400
+            );
+        }
+
+        const start = new Date();
+        start.setHours(
+            startHour,
+            startMinute,
+            0,
+            0
+        );
+
+        const end = new Date();
+        end.setHours(
+            endHour,
+            endMinute,
+            0,
+            0
+        );
+
+        if (end <= start) {
+            end.setDate(end.getDate() + 1);
+        }
+
+        const calculatedHours =
+            Number(
+                (
+                    (end.getTime() -
+                        start.getTime()) /
+                    (1000 * 60 * 60)
+                ).toFixed(2)
+            );
+
+        if (
+            Math.abs(
+                calculatedHours - workingHours
+            ) > 0.25
+        ) {
+            throw new AppError(
+                `Working hours do not match shift time. Expected ${calculatedHours} hours`,
+                400
+            );
+        }
+
+        const shift =
+            await this._shiftModel.create({
+                name,
+                startTime,
+                endTime,
+                workingHours
+            } as any);
 
         return res.status(201).json({
             success: true,
-            message: "Shift created successfully",
+            message:
+                "Shift created successfully",
             data: shift
         });
     };
