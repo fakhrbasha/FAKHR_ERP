@@ -410,23 +410,32 @@ class AttendanceService {
             throw new AppError("checkOut cannot be before checkIn", 400);
         }
 
-        const workedHours = diffMs / (1000 * 60 * 60);
+        // const workedHours = diffMs / (1000 * 60 * 60);
         const expectedHours =
             (shiftEnd.getTime() - shiftStart.getTime()) / (1000 * 60 * 60);
 
-        const lateMinutes = Math.max(
-            0,
-            (start.getTime() - shiftStart.getTime()) / (1000 * 60)
-        );
+        const lateMinutes =
+            Math.max(
+                0,
+                (start.getTime() - shiftStart.getTime()) /
+                (1000 * 60)
+            );
+
+        const workedHours =
+            (end.getTime() - start.getTime()) /
+            (1000 * 60 * 60);
+
         const overtimeHours =
-            workedHours > expectedHours
-                ? workedHours - expectedHours
-                : 0;
+            Math.max(
+                0,
+                workedHours - expectedHours
+            );
 
         const missingHours =
-            workedHours < expectedHours
-                ? expectedHours - workedHours
-                : 0;
+            Math.max(
+                0,
+                expectedHours - workedHours
+            );
 
         let status: attendanceStatus;
 
